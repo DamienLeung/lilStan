@@ -106,6 +106,15 @@ public class User {
         this.deptId = null;
     }
 
+    public User(Integer id, String username, String password, Character isSecret, String email, Integer deptId) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.isSecret = isSecret;
+        this.email = email;
+        this.deptId = deptId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
