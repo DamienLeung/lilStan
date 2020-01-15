@@ -29,40 +29,32 @@ $(function () {
     });
 
 
-    $(".myDepList>ul>li").on("click",function () {
-        if($(this).find("div").attr('class').indexOf('isHidden') !== -1){
+    $(".myDepList>ul>li").on("click", function () {
+        if ($(this).find("div").attr('class').indexOf('isHidden') !== -1) {
             $(this).find("div").removeClass("isHidden")
-        }else{
+        } else {
             $(this).find("div").addClass("isHidden")
         }
-
-
     });
 
-    $(".myList>ul>li>div").on("click",function () {
-        if($(this).attr('class').indexOf('isHidden') !== -1){
-            $(this).parent().removeClass("isHidden")
-        }else{
-            $(this).parent().addClass("isHidden")
-        }
-
-
+    $(".myList>ul>li>div").on("click", function () {
+        $(this).parent().css("display", "none");
     });
 
-    $(".table").find("input[type='checkbox']").on("click",function () {
-        if($(this).prop("checked")){
+    $(".table").find("input[type='checkbox']").on("click", function () {
+        if ($(this).prop("checked")) {
             layer.msg("关注成功")
-        }else{
+        } else {
             layer.msg("取关成功")
 
         }
 
     })
 
-    $('.chosen').chosen({
+    /*$('.chosen').chosen({
         no_results_text: "没有找到结果！",//搜索无结果时显示的提示
-        search_contains:true,   //关键字模糊搜索。设置为true，只要选项包含搜索词就会显示；设置为false，则要求从选项开头开始匹配
-        allow_single_deselect:true, //单选下拉框是否允许取消选择。如果允许，选中选项会有一个x号可以删除选项
+        search_contains: true,   //关键字模糊搜索。设置为true，只要选项包含搜索词就会显示；设置为false，则要求从选项开头开始匹配
+        allow_single_deselect: true, //单选下拉框是否允许取消选择。如果允许，选中选项会有一个x号可以删除选项
         disable_search: false, //禁用搜索。设置为true，则无法搜索选项。
         disable_search_threshold: 0, //当选项少等于于指定个数时禁用搜索。
         inherit_select_classes: true, //是否继承原下拉框的样式类，此处设为继承
@@ -74,7 +66,7 @@ $(function () {
         case_sensitive_search: false, //搜索大小写敏感。此处设为不敏感
         group_search: false, //选项组是否可搜。此处搜索不可搜
         include_group_label_in_selected: true //选中选项是否显示选项分组。false不显示，true显示。默认false。
-    });
+    });*/
 });
 
 //触发隐藏的file表单
