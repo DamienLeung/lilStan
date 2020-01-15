@@ -1,9 +1,11 @@
 package dfbz.com.dao.base;
 
 import dfbz.com.annotation.TableAnnotation;
+import dfbz.com.pojo.User;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.lang.reflect.Field;
@@ -139,19 +141,45 @@ public class BaseDao<T> {
 //                getField(tClass, results, o, args);
 //                list.add((T) o);
 
-            tClass.getDeclaredMethod();
-            int update = runner.update("select * from " + tableName + " where name=? && password=?", name, password);
-            if (update > 0)
+            Method getUsername = tClass.getMethod("getUsername");
+            Method getPassword = tClass.getMethod("getPassword");
+            name = (String)getUsername.invoke(t);
+            password = (String)getPassword.invoke(t);
+            ResultSetHandler<User> h = new BeanHandler<>(User.class);
+            User query = runner.query(
+                    "SELECT * FROM " + tableName + " WHERE username=? && password=?", h, name, password);
+            System.out.println(query);
+            if (query != null)
                 return true;
-        } catch (SQLException e) {
+        } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } /*finally {
             JDBCUtil.close(results, statement, connection);
         }*/
 
-        System.out.println(list);
         System.out.println(t);
         return false;
+    }
+
+    public void register(T t) {
+        Class tClass = t.getClass();
+        String tableName = getTableName(tClass);
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            ArrayList<String> strings = new ArrayList<>();
+            Field[] args = t.getClass().getDeclaredFields();
+            for (Field arg :
+                    args) {
+                String col = arg.getName();
+                String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
+                Method method = t.getClass().getDeclaredMethod(methodN);
+                if (method.invoke(t) != null)
+                    strings.add(method.invoke(t).toString());
+            }
+            runner.update("insert into " + tableName + " values(?,?,?,?,?,null)", strings.toArray());
+        } catch (NoSuchMethodException | IllegalAccessException | SQLException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getField(Class<?> tClass, ResultSet results, Object o, Field[] args)
@@ -163,6 +191,20 @@ public class BaseDao<T> {
             Method method = tClass.getDeclaredMethod(methodN, arg.getType());
             method.invoke(o, results.getObject(col));
         }
+    }
+
+    public int getMaxId(Class<T> tClass) {
+        String tableName = getTableName(tClass);
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            ResultSetHandler<List<String>> h = new BeanListHandler<>(String.class);
+            List<String> list = runner.query("select id from " + tableName, h);
+            System.out.println(list.size());
+            return list.size();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private String getTableName(Class<T> tClass) {

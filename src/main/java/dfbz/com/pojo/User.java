@@ -31,7 +31,7 @@ public class User {
      * 0：Public (Default)
      */
     @FieldAnnotation("is_secret")
-    private String isSecret;
+    private Character isSecret;
 
     /**
      * Email Address
@@ -68,11 +68,11 @@ public class User {
         this.password = password;
     }
 
-    public String getIsSecret() {
+    public Character getIsSecret() {
         return isSecret;
     }
 
-    public void setIsSecret(String isSecret) {
+    public void setIsSecret(Character isSecret) {
         this.isSecret = isSecret;
     }
 
@@ -95,5 +95,26 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public User(Integer id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isSecret = '0';
+        this.deptId = null;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", isSecret=" + isSecret +
+                ", email='" + email + '\'' +
+                ", deptId=" + deptId +
+                '}';
     }
 }

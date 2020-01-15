@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +34,7 @@
             </div>
         </div>
         <div class="form-bottom">
-            <form role="form" action="html/home.html" method="post" class="login-form">
+            <form role="form" action="<c:url value="/user/register"/>" method="post" class="login-form">
 
                 <!--上面的输入框尽可能不需要外边距，使用row解决-->
                 <div class="row">
