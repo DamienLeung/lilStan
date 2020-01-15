@@ -3,6 +3,21 @@
     cursor: pointer;
 }
 
+.myDepList li{
+    margin-bottom: 15px;
+    list-style: none;
+    background-color: rgb(45, 48, 53);
+}
+
+.myDepList a{
+    line-height: 40px;
+    text-decoration: none;
+}
+
+.myDepList select{
+    margin-left: 15px;
+}
+
 
 .myList li{
     margin-bottom: 15px;

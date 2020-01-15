@@ -4,7 +4,7 @@ $(function () {
 
     $("#avatar").click(function () {
         console.log("你点击了头像");
-        window.location.href = '../html/user_look.html'
+        window.location.href = '../../html/user_look.html'
     });
 
     //file表单选中文件时,让file表单的val展示到showname这个展示框
@@ -15,29 +15,39 @@ $(function () {
     //用户列表，查看详情，通过class名字userDetail来找
     $(".userDetail").click(function () {
         console.log("你点击了用户详情");
-        window.location.href = '../html/user_detail.html'
+        window.location.href = '../../html/user_detail.html'
     });
 
     //发布会议跳转链接
     $("#addMeet").click(function () {
-        window.location.href = '../html/meeting_add.html'
+        window.location.href = '../../html/meeting_add.html'
     });
 
     //添加文章跳转链接
     $("#addArt").click(function () {
-        window.location.href = '../html/article_add.html'
+        window.location.href = '../../html/article_add.html'
     });
 
 
-    $(".myList>ul>li").on("click",function () {
-        if($(this).find("div").attr('class')=='list-group myGroup isHidden'){
+    $(".myDepList>ul>li").on("click",function () {
+        if($(this).find("div").attr('class').indexOf('isHidden') !== -1){
             $(this).find("div").removeClass("isHidden")
         }else{
             $(this).find("div").addClass("isHidden")
         }
 
 
-    })
+    });
+
+    $(".myList>ul>li>div").on("click",function () {
+        if($(this).attr('class').indexOf('isHidden') !== -1){
+            $(this).parent().removeClass("isHidden")
+        }else{
+            $(this).parent().addClass("isHidden")
+        }
+
+
+    });
 
     $(".table").find("input[type='checkbox']").on("click",function () {
         if($(this).prop("checked")){
