@@ -117,32 +117,41 @@ public class BaseDao<T> {
     public boolean validateUser(T t) {
         Class tClass = t.getClass();
         String tableName = getTableName(tClass);
-        StringBuilder query = new StringBuilder("select * from " + tableName);
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet results = null;
-        ArrayList<T> list = new ArrayList<>();
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        String name;
+        String password;
+
+//        StringBuilder query = new StringBuilder("select * from " + tableName);
+//        Connection connection = null;
+//        PreparedStatement statement = null;
+//        ResultSet results = null;
+//        ArrayList<T> list = new ArrayList<>();
         try {
-            connection = JDBCUtil.getConnection();
-            statement = connection.prepareStatement(query.toString());
-            System.out.println(query.toString());
-            results = statement.executeQuery();
-            while (results.next()) {
-                Object o = tClass.newInstance();
-                Field[] args = tClass.getDeclaredFields();
-                getField(tClass, results, o, args);
-                list.add((T) o);
-            }
-        } catch (SQLException | IllegalAccessException | InstantiationException | NoSuchMethodException
-                | InvocationTargetException e) {
+
+
+//            connection = JDBCUtil.getConnection();
+//            statement = connection.prepareStatement(query.toString());
+//            System.out.println(query.toString());
+//            results = statement.executeQuery();
+//            while (results.next()) {
+//                Object o = tClass.newInstance();
+//                Field[] args = tClass.getDeclaredFields();
+//                getField(tClass, results, o, args);
+//                list.add((T) o);
+
+            tClass.getDeclaredMethod();
+            int update = runner.update("select * from " + tableName + " where name=? && password=?", name, password);
+            if (update > 0)
+                return true;
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
+        } /*finally {
             JDBCUtil.close(results, statement, connection);
-        }
+        }*/
 
         System.out.println(list);
         System.out.println(t);
-        return list.contains(t);
+        return false;
     }
 
     private void getField(Class<?> tClass, ResultSet results, Object o, Field[] args)

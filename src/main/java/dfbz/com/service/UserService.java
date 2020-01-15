@@ -1,9 +1,9 @@
-package dfbz.com.service.impl;
+package dfbz.com.service;
 
 import dfbz.com.dao.UserDao;
 import dfbz.com.pojo.User;
 
-public class UserServiceImpl {
+public class UserService {
 
     private UserDao dao = new UserDao();
 
