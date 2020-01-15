@@ -15,6 +15,7 @@ public class UserInfo {
     /**
      * User id
      */
+    @FieldAnnotation("user_id")
     private Integer userId;
 
     /**
