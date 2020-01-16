@@ -23,6 +23,18 @@
 </head>
 <body>
 
+<%--<%
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null && cookies.length != 0) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("username")) {
+                response.sendRedirect(request.getContextPath() + "/user/home");
+                break;
+            }
+        }
+
+%>--%>
+
 <div class="container myBox">
     <div class="col-xs-8 col-xs-offset-4 col-sm-6 col-sm-offset-3 form-box">
         <div class="form-top">
@@ -54,7 +66,7 @@
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"> 记住我
+                        <input type="checkbox" name="remem-me"> 记住我
                     </label>
                 </div>
                 <button type="submit" class="btn">登录</button>

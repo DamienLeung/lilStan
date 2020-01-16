@@ -115,6 +115,8 @@ public class User {
         this.deptId = deptId;
     }
 
+    public User() {}
+
     @Override
     public String toString() {
         return "User{" +

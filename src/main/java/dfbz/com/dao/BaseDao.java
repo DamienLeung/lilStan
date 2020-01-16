@@ -1,4 +1,4 @@
-package dfbz.com.dao.base;
+package dfbz.com.dao;
 
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.pojo.User;
@@ -7,16 +7,15 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.MapHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BaseDao<T> {
 
@@ -116,41 +115,29 @@ public class BaseDao<T> {
         }
     }
 
-    public boolean validateUser(T t) {
+    public Integer validateUser(T t) {
         Class tClass = t.getClass();
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         String name;
         String password;
-
-//        StringBuilder query = new StringBuilder("select * from " + tableName);
-//        Connection connection = null;
-//        PreparedStatement statement = null;
-//        ResultSet results = null;
-//        ArrayList<T> list = new ArrayList<>();
         try {
-
-
-//            connection = JDBCUtil.getConnection();
-//            statement = connection.prepareStatement(query.toString());
-//            System.out.println(query.toString());
-//            results = statement.executeQuery();
-//            while (results.next()) {
-//                Object o = tClass.newInstance();
-//                Field[] args = tClass.getDeclaredFields();
-//                getField(tClass, results, o, args);
-//                list.add((T) o);
-
             Method getUsername = tClass.getMethod("getUsername");
             Method getPassword = tClass.getMethod("getPassword");
-            name = (String)getUsername.invoke(t);
-            password = (String)getPassword.invoke(t);
-            ResultSetHandler<User> h = new BeanHandler<>(User.class);
-            User query = runner.query(
-                    "SELECT * FROM " + tableName + " WHERE username=? && password=?", h, name, password);
-            System.out.println(query);
-            if (query != null)
-                return true;
+            name = (String) getUsername.invoke(t);
+            password = (String) getPassword.invoke(t);
+            System.out.println(name + "-" + password);
+            System.out.println(t);
+            T t1 = runner.query(
+                    "SELECT * FROM " + tableName + " WHERE username=? && password=?"
+                    , new BeanHandler<T>(tClass), name, password);
+
+            System.out.println(t1);
+            if (t1 != null) {
+                Method getId = tClass.getMethod("getId");
+                Integer id = (Integer) getId.invoke(t1);
+                return id;
+            }
         } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } /*finally {
@@ -158,7 +145,7 @@ public class BaseDao<T> {
         }*/
 
         System.out.println(t);
-        return false;
+        return null;
     }
 
     public void register(T t) {
@@ -205,6 +192,23 @@ public class BaseDao<T> {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public Map<String, Object> getUserById(Integer id) {
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            return runner.query("select i.real_name, d.`name` from user_info i" +
+                            "left join user u" +
+                            "on u.id = i.user_id" +
+                            "left join dept d" +
+                            "on d.id = u.dept_id" +
+                            "where u.id=1;"
+                    , new MapHandler(), id);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private String getTableName(Class<T> tClass) {

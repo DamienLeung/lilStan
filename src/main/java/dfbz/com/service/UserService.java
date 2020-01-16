@@ -1,13 +1,15 @@
 package dfbz.com.service;
 
-import dfbz.com.dao.UserDao;
+import dfbz.com.dao.user.UserDao;
 import dfbz.com.pojo.User;
+
+import java.util.Map;
 
 public class UserService {
 
     private UserDao dao = new UserDao();
 
-    public boolean validateUser(User user) {
+    public Integer validateUser(User user) {
         return dao.validateUser(user);
     }
 
@@ -17,5 +19,9 @@ public class UserService {
 
     public int getId(Class tClass) {
         return dao.getMaxId(tClass);
+    }
+
+    public Map<String, Object> getUserInfo(Integer id) {
+        return dao.getUserById(id);
     }
 }

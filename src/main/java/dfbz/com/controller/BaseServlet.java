@@ -17,7 +17,7 @@ public class BaseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String uri = req.getRequestURI();
         String[] split = uri.split("/");
-        String methodName = split[3];
+        String methodName = split[2];
         System.out.println(methodName);
         String className = this.getClass().getName();
         System.out.println(className);
@@ -29,7 +29,7 @@ public class BaseServlet extends HttpServlet {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             if (req.getSession().getAttribute("user") != null)
-                resp.sendRedirect("/html/home.html");
+                resp.sendRedirect("/html/home.jsp");
             else
                 resp.sendRedirect("/index.jsp");
         }
