@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="form-bottom">
-            <form role="form" action="<c:url value="/user/register"/>" method="post" class="login-form">
+            <form role="form" action="<c:url value="/login/register"/>" method="post" class="login-form">
 
                 <!--上面的输入框尽可能不需要外边距，使用row解决-->
                 <div class="row">

@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="form-bottom">
-            <form role="form" action="<c:url value="/user/login"/>" method="post" class="login-form">
+            <form role="form" action="<c:url value="/login/login"/>" method="post" class="login-form">
 
                 <!--上面的输入框尽可能不需要外边距，使用row解决-->
                 <div class="row">
@@ -73,7 +73,7 @@
 
                 <div class="row">
                     <div style="padding: 10px 25px">
-                        <div style="display: inline-block;float: left" class="text-left"><a href="forget.html">忘记密码?</a></div>
+                        <div style="display: inline-block;float: left" class="text-left"><a href="forget.jsp">忘记密码?</a></div>
                         <div style="display: inline-block;float: right" class="text-right"><a href="register.jsp">没有账号?</a></div>
                     </div>
                 </div>
