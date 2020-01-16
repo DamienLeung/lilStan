@@ -117,25 +117,36 @@ public class BaseDao<T> {
 
 
 
-    public void register(T t) {
-        Class tClass = t.getClass();
+    public boolean checkExsistence(String colName, Object o, Class<T> tClass) {
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+
         try {
-            ArrayList<String> strings = new ArrayList<>();
-            Field[] args = t.getClass().getDeclaredFields();
-            for (Field arg :
-                    args) {
-                String col = arg.getName();
-                String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
-                Method method = t.getClass().getDeclaredMethod(methodN);
-                if (method.invoke(t) != null)
-                    strings.add(method.invoke(t).toString());
-            }
-            runner.update("insert into " + tableName + " values(?,?,?,?,?,null)", strings.toArray());
-        } catch (NoSuchMethodException | IllegalAccessException | SQLException | InvocationTargetException e) {
+            T query = runner.query(
+                    "select * from " + tableName + " where ?=?"
+                    , new BeanHandler<>(tClass), colName, o);
+            if (query != null)
+                return true;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public T rowQuery(String colName, Object o, Class<T> tClass) {
+        String tableName = getTableName(tClass);
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+
+        try {
+            T query = runner.query(
+                    "select * from " + tableName + " where ?=?"
+                    , new BeanHandler<>(tClass), colName, o);
+            if (query != null)
+                return query;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void getField(Class<?> tClass, ResultSet results, Object o, Field[] args)

@@ -49,10 +49,24 @@ public class UserServlet extends BaseServlet {
         String username = req.getParameter("form-username");
         String password = req.getParameter("form-password");
         String email = req.getParameter("form-email");
-        int id = service.getId() + 1;
-        User user = new User(id, username, password, email);
-        service.register(user);
-        resp.sendRedirect(req.getContextPath() + "/index.jsp");
+        boolean b1 = service.checkExsistence("username", username);
+        boolean b2 = service.checkExsistence("email", email);
+        if (b1) {
+            req.getSession().setAttribute("regErrorMsg", "用戶已存在");
+            resp.sendRedirect(req.getContextPath() + "/user/showRegister");
+        }
+        else {
+            if (b2) {
+                req.getSession().setAttribute("regErrorMsg", "郵箱已存在");
+                resp.sendRedirect(req.getContextPath() + "/user/showRegister");
+            }
+            else {
+                int id = service.getId() + 1;
+                User user = new User(id, username, password, email);
+                service.register(user);
+                resp.sendRedirect(req.getContextPath() + "/index.jsp");
+            }
+        }
     }
 
     public void logout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
