@@ -115,38 +115,7 @@ public class BaseDao<T> {
         }
     }
 
-    public Integer validateUser(T t) {
-        Class tClass = t.getClass();
-        String tableName = getTableName(tClass);
-        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-        String name;
-        String password;
-        try {
-            Method getUsername = tClass.getMethod("getUsername");
-            Method getPassword = tClass.getMethod("getPassword");
-            name = (String) getUsername.invoke(t);
-            password = (String) getPassword.invoke(t);
-            System.out.println(name + "-" + password);
-            System.out.println(t);
-            T t1 = runner.query(
-                    "SELECT * FROM " + tableName + " WHERE username=? && password=?"
-                    , new BeanHandler<T>(tClass), name, password);
 
-            System.out.println(t1);
-            if (t1 != null) {
-                Method getId = tClass.getMethod("getId");
-                Integer id = (Integer) getId.invoke(t1);
-                return id;
-            }
-        } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        } /*finally {
-            JDBCUtil.close(results, statement, connection);
-        }*/
-
-        System.out.println(t);
-        return null;
-    }
 
     public void register(T t) {
         Class tClass = t.getClass();
@@ -180,36 +149,9 @@ public class BaseDao<T> {
         }
     }
 
-    public int getMaxId(Class<T> tClass) {
-        String tableName = getTableName(tClass);
-        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-        try {
-            ResultSetHandler<List<String>> h = new BeanListHandler<>(String.class);
-            List<String> list = runner.query("select id from " + tableName, h);
-            System.out.println(list.size());
-            return list.size();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
-    public Map<String, Object> getUserById(Integer id) {
-        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-        try {
-            return runner.query("select i.real_name, d.`name` from user_info i" +
-                            "left join user u" +
-                            "on u.id = i.user_id" +
-                            "left join dept d" +
-                            "on d.id = u.dept_id" +
-                            "where u.id=1;"
-                    , new MapHandler(), id);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     private String getTableName(Class<T> tClass) {
         TableAnnotation annotation = tClass.getAnnotation(TableAnnotation.class);

@@ -17,8 +17,8 @@ public class UserService {
         dao.register(user);
     }
 
-    public int getId(Class tClass) {
-        return dao.getMaxId(tClass);
+    public int getId() {
+        return dao.getMaxId();
     }
 
     public Map<String, Object> getUserInfo(Integer id) {

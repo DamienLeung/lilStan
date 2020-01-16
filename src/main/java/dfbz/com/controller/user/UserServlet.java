@@ -49,7 +49,7 @@ public class UserServlet extends BaseServlet {
         String username = req.getParameter("form-username");
         String password = req.getParameter("form-password");
         String email = req.getParameter("form-email");
-        int id = service.getId(User.class) + 1;
+        int id = service.getId() + 1;
         User user = new User(id, username, password, email);
         service.register(user);
         resp.sendRedirect(req.getContextPath() + "/index.jsp");

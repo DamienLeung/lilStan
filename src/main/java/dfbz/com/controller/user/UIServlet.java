@@ -16,7 +16,10 @@ public class UIServlet extends BaseServlet {
 
     public void home(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Map<String, Object> userInfo = (Map<String, Object>) req.getSession().getAttribute("userInfo");
+        Map<String, Object> userInfo =
+                service.getUserInfo((Integer)req.getSession().getAttribute("userId"));
+        System.out.println(userInfo);
+        req.getSession().setAttribute("userInfo", userInfo);
         resp.sendRedirect(req.getContextPath() + "/html/home.jsp");
     }
 }
