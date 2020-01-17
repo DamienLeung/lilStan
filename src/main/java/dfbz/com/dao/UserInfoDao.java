@@ -10,6 +10,7 @@ import javax.xml.crypto.Data;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,10 +24,8 @@ public class UserInfoDao extends BaseDao<UserInfo> {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(Integer.parseInt(id));
             System.out.println(new Date().toString());
-            Date time = new Date();
-            System.out.println(new java.sql.Date(time.getTime()));
-            userInfo.setRegisterTime(new java.sql.Date(time.getTime()));
-            userInfo.setLoginTime(new java.sql.Date(time.getTime()));
+            userInfo.setRegisterTime(new Timestamp(System.currentTimeMillis()));
+            userInfo.setLoginTime(new Timestamp(System.currentTimeMillis()));
             System.out.println(userInfo);
             add(userInfo);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -42,7 +41,7 @@ public class UserInfoDao extends BaseDao<UserInfo> {
             System.out.println(userInfo);
             Date time = new Date();
             System.out.println(time);
-            userInfo.setLoginTime(new java.sql.Date(time.getTime()));
+            userInfo.setLoginTime(new Timestamp(System.currentTimeMillis()));
             save(userInfo);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

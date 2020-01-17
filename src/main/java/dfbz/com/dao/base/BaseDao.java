@@ -50,20 +50,23 @@ public class BaseDao<T> {
                 String col = arg.getName();
 
                 String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
-                Method method = t.getClass().getDeclaredMethod(methodN);
+                Method method = null;
+                method = t.getClass().getDeclaredMethod(methodN);
                 if (method.invoke(t) != null) {
+
                     query.append(col).append("=");
                     strings.add(method.invoke(t).toString());
-                    query.append("? ");
+                    query.append("?,");
                 }
             }
-            if (tClass == UserInfo.class)
+            query.delete(query.lastIndexOf(","), query.length());
+            if (tClass.equals(UserInfo.class))
                 query.append(" where user_id=").append(id.toString());
             else
                 query.append(" where id=").append(id.toString());
             System.out.println(query);
             System.out.println(strings);
-            runner.update(query.toString(), strings);
+            runner.update(query.toString(), strings.toArray());
         } catch (NoSuchMethodException | IllegalAccessException
                 | InvocationTargetException | SQLException e1) {
             e1.printStackTrace();

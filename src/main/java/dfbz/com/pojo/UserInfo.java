@@ -3,7 +3,7 @@ package dfbz.com.pojo;
 import dfbz.com.annotation.FieldAnnotation;
 import dfbz.com.annotation.TableAnnotation;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * user_info
@@ -66,19 +66,19 @@ public class UserInfo {
         this.desc = desc;
     }
 
-    public Date getRegisterTime() {
+    public Timestamp getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Date registerTime) {
+    public void setRegisterTime(Timestamp registerTime) {
         this.registerTime = registerTime;
     }
 
-    public Date getLoginTime() {
+    public Timestamp getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Date loginTime) {
+    public void setLoginTime(Timestamp loginTime) {
         this.loginTime = loginTime;
     }
 
@@ -128,13 +128,13 @@ public class UserInfo {
      * Register time
      */
     @FieldAnnotation("register_time")
-    private Date registerTime;
+    private Timestamp registerTime;
 
     /**
      * Last login time
      */
     @FieldAnnotation("login_time")
-    private Date loginTime;
+    private Timestamp loginTime;
 
     /**
      * Avatar address
