@@ -23,17 +23,9 @@
 </head>
 <body>
 
-<%--<%
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null && cookies.length != 0) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("username")) {
-                response.sendRedirect(request.getContextPath() + "/user/home");
-                break;
-            }
-        }
+<%
 
-%>--%>
+%>
 
 <div class="container myBox">
     <div class="col-xs-8 col-xs-offset-4 col-sm-6 col-sm-offset-3 form-box">

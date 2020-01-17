@@ -31,7 +31,7 @@
             <div class="right-menu list-inline no-margin-bottom">
                 <!-- Log out -->
                 <div class="list-inline-item logout">
-                    <a id="logout" href="<c:url value="/user/logout"/>" class="nav-link"><span class="d-none d-sm-inline">Logout </span></a>
+                    <a id="logout" href="<c:url value="/login/logout"/>" class="nav-link"><span class="d-none d-sm-inline">Logout </span></a>
                 </div>
             </div>
         </div>

@@ -1,8 +1,9 @@
-package dfbz.com.dao.user;
+package dfbz.com.dao;
 
 import dfbz.com.annotation.TableAnnotation;
-import dfbz.com.dao.BaseDao;
+import dfbz.com.dao.base.BaseDao;
 import dfbz.com.pojo.User;
+import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -10,6 +11,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -80,6 +82,8 @@ public class UserDao extends BaseDao<User> {
         Class tClass = user.getClass();
         String tableName = getTableName();
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        StringBuilder sql = new StringBuilder("insert into ");
+        sql.append(tableName).append(" values(");
         try {
             ArrayList<String> strings = new ArrayList<>();
             Field[] args = user.getClass().getDeclaredFields();
@@ -88,10 +92,15 @@ public class UserDao extends BaseDao<User> {
                 String col = arg.getName();
                 String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
                 Method method = user.getClass().getDeclaredMethod(methodN);
-                if (method.invoke(user) != null)
+                if (method.invoke(user) != null) {
+                    sql.append("?,");
                     strings.add(method.invoke(user).toString());
+                } else
+                    sql.append("null,");
             }
-            runner.update("insert into " + tableName + " values(?,?,?,?,?,null)", strings.toArray());
+            sql.delete(sql.lastIndexOf(","), sql.length());
+            sql.append(")");
+            runner.update(sql.toString(), strings.toArray());
         } catch (NoSuchMethodException | IllegalAccessException | SQLException | InvocationTargetException e) {
             e.printStackTrace();
         }

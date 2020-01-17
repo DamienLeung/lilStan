@@ -18,7 +18,7 @@ public class UserInfo {
     @FieldAnnotation("user_id")
     private Integer userId;
 
-    public Integer getUserId() {
+    public Integer getId() {
         return userId;
     }
 

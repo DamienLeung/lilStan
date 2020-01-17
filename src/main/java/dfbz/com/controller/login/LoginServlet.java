@@ -3,12 +3,17 @@ package dfbz.com.controller.login;
 import dfbz.com.controller.BaseServlet;
 import dfbz.com.pojo.User;
 import dfbz.com.service.UserService;
+import dfbz.com.util.MailUtil;
 
+import javax.mail.MessagingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.Random;
 
 @WebServlet("/login/*")
 public class LoginServlet extends BaseServlet {
@@ -27,6 +32,7 @@ public class LoginServlet extends BaseServlet {
             String path = req.getContextPath();
             Integer id = service.validateUser(new User(username, password));
             if (id != null) {
+//                service.updateInfo(new Date(), id);
                 if (check != null) {
                     Cookie cookie = new Cookie("username", username);
                     cookie.setMaxAge(MAX_COOKIE_TIME);
@@ -51,14 +57,15 @@ public class LoginServlet extends BaseServlet {
         String email = req.getParameter("form-email");
         boolean b1 = service.checkExsistence("username", username);
         boolean b2 = service.checkExsistence("email", email);
+        System.out.println(b1 + "," + b2);
         if (b1) {
             req.getSession().setAttribute("regErrorMsg", "用戶已存在");
-            resp.sendRedirect(req.getContextPath() + "/user/showRegister");
+            resp.sendRedirect(req.getContextPath() + "/register.jsp");
         }
         else {
             if (b2) {
                 req.getSession().setAttribute("regErrorMsg", "郵箱已存在");
-                resp.sendRedirect(req.getContextPath() + "/user/showRegister");
+                resp.sendRedirect(req.getContextPath() + "/register.jsp");
             }
             else {
                 int id = service.getId() + 1;
@@ -80,6 +87,17 @@ public class LoginServlet extends BaseServlet {
             }
             req.getSession().removeAttribute("userId");
         resp.sendRedirect("/index.jsp");
+    }
+
+    public void sendCodeEmail(HttpServletRequest req, HttpServletResponse resp) {
+        String email = (String) req.getAttribute("Email");
+        Random random = new Random();
+        int rand = random.nextInt(900000) + 100000;
+        try {
+            MailUtil.send(email, "lilStan驗證碼", String.valueOf(rand), "UTF-8");
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

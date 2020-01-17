@@ -33,15 +33,15 @@
             </div>
         </div>
         <div class="form-bottom">
-            <form role="form" action="html/home.jsp" method="post" class="login-form">
+            <form role="form" action="#" method="post" class="login-form">
 
                 <!--上面的输入框尽可能不需要外边距，使用row解决-->
                 <div class="row">
                     <div style="margin-bottom: 15px" class="form-inline">
-                        <label class="sr-only" for="form-username">Username</label>
+                        <label class="sr-only" for="form-username">Email</label>
                         <input type="text" name="form-username" placeholder="邮箱" class="form-username"
                                id="form-username">
-                        <input type="button" class="btn btn-primary" value="发送验证码">
+                        <input type="button" class="btn btn-primary" id="send" value="发送验证码">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">验证码</label>
@@ -74,6 +74,19 @@
     </div>
 </div>
 
+
+<script>
+    $(function () {
+        $("#send").click(function () {
+            var email = $("#form-username").val();
+            if (email.trim() === "") {
+                alert("請輸入郵箱地址");
+                return;
+            }
+            $.post(${}"/login/sendCodeEmail", email)
+        })
+    })
+</script>
 
 <!-- Javascript -->
 <script src="assets/js/jquery-1.11.1.min.js"></script>

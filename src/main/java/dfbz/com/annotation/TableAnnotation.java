@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TableAnnotation {
     String value();
+    String key() default "id";
+    String keyName() default "getId";
 }

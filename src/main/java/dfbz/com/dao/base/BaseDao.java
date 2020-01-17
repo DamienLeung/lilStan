@@ -1,4 +1,4 @@
-package dfbz.com.dao;
+package dfbz.com.dao.base;
 
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.pojo.User;
@@ -76,6 +76,7 @@ public class BaseDao<T> {
         Class tClass = t.getClass();
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+
         try {
             ArrayList<String> strings = new ArrayList<>();
             Field[] args = t.getClass().getDeclaredFields();
@@ -123,8 +124,9 @@ public class BaseDao<T> {
 
         try {
             T query = runner.query(
-                    "select * from " + tableName + " where ?=?"
-                    , new BeanHandler<>(tClass), colName, o);
+                    "select * from " + tableName + " where " + colName + "=?"
+                    , new BeanHandler<>(tClass), "caterpillar");
+            System.out.println(query);
             if (query != null)
                 return true;
         } catch (SQLException e) {
@@ -134,9 +136,11 @@ public class BaseDao<T> {
     }
 
     public T rowQuery(String colName, Object o, Class<T> tClass) {
-        String tableName = getTableName(tClass);
+        //String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-
+        TableAnnotation annotation = tClass.getAnnotation(TableAnnotation.class);
+        String tableName = annotation.value();
+        colName = annotation.keyName();
         try {
             T query = runner.query(
                     "select * from " + tableName + " where ?=?"
