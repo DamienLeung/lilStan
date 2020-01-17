@@ -5,6 +5,7 @@ import dfbz.com.dao.UserInfoDao;
 import dfbz.com.pojo.User;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class UserService {
@@ -18,11 +19,11 @@ public class UserService {
 
     public void register(User user) {
         dao.register(user);
-        //infoDao.register(user);
+        infoDao.register(user);
     }
 
-    public void updateInfo(Date date, Integer id) {
-        infoDao.update(date, id);
+    public void updateInfo(Integer id) {
+        infoDao.update(id);
     }
 
     public int getId() {
@@ -35,5 +36,16 @@ public class UserService {
 
     public boolean checkExsistence(String colName, Object o) {
         return dao.checkExsistence(colName, o, User.class);
+    }
+
+    public List<Map<String, Object>> findUserList(int page) {
+        List<Map<String, Object>> map = dao.listMap(page);
+        for (Map<String, Object> row :
+                map) {
+            if (row.get("realName") == null) {
+                row.put("realName", row.get("username"));
+            }
+        }
+        return map;
     }
 }

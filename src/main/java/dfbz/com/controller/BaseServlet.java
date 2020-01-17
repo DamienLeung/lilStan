@@ -18,9 +18,7 @@ public class BaseServlet extends HttpServlet {
         String uri = req.getRequestURI();
         String[] split = uri.split("/");
         String methodName = split[2];
-        System.out.println(methodName);
         String className = this.getClass().getName();
-        System.out.println(className);
         try {
             Class<?> aClass = Class.forName(className);
             Method method = aClass.getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);

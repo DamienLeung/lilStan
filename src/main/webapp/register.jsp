@@ -63,7 +63,7 @@
                 <!--上面的输入框尽可能不需要外边距，使用row包裹起来解决-->
 
 
-                <button type="submit" class="btn">注册</button>
+                <button type="submit" class="btn" id="register">注册</button>
 
                 <div class="row">
                     <div style="padding: 10px 25px">
@@ -77,9 +77,11 @@
     </div>
 </div>
 
-
 <script>
-
+    $("#register").click(function () {
+        if (${sessionScope.regErrorMsg} != null || ${sessionScope.regErrorMsg} !== "")
+            alert(${sessionScope.regErrorMsg});
+    })
 </script>
 
 <!-- Javascript -->

@@ -1,10 +1,11 @@
 package dfbz.com.dao.base;
 
+import dfbz.com.annotation.FieldAnnotation;
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.pojo.User;
+import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.*;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
@@ -35,36 +36,46 @@ public class BaseDao<T> {
 //        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         StringBuilder query = new StringBuilder("update " + tableName + " set ");
         Field[] args = tClass.getDeclaredFields();
-        Connection connection = null;
-        PreparedStatement statement = null;
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
-            Method getId = tClass.getDeclaredMethod("getId");
+            ArrayList<String> strings = new ArrayList<>();
+            Method getId = null;
+            if (tClass == UserInfo.class)
+                getId = tClass.getMethod("getUserId");
+            else
+                getId = tClass.getMethod("getId");
             Object id = getId.invoke(t);
             for (Field arg :
                     args) {
-                arg.setAccessible(true);
-                if (!arg.get(t).equals("") && arg.get(t) != null)
-                    query.append(arg.getName()).append("=\"").append(arg.get(t).toString()).append("\", ");
+                String col = arg.getName();
+                query.append(col).append("=");
+                String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
+                Method method = t.getClass().getDeclaredMethod(methodN);
+                if (method.invoke(t) == null)
+                    query.append("null ");
+                else {
+                    strings.add(method.invoke(t).toString());
+                    query.append("? ");
+                }
             }
-            query.delete(query.lastIndexOf(","), query.length());
-            query.append(" where id = ").append(id.toString());
-//            runner.update(query.toString(), tableName, id.toString());
-            connection = JDBCUtil.getConnection();
-            statement = connection.prepareStatement(query.toString());
+            if (tClass == UserInfo.class)
+                query.append(" where user_id=").append(id.toString());
+            else
+                query.append(" where id=").append(id.toString());
             System.out.println(query);
-            statement.execute();
+            runner.update(query.toString(), strings);
+
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            JDBCUtil.close(null, statement, connection);
         }
     }
 
     public List<T> getListById(Class<T> tClass) {
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         try {
-            ResultSetHandler<List<T>> h = new BeanListHandler<>(tClass);
+            ResultSetHandler<List<T>> h = new BeanListHandler<>(tClass, processor);
             return runner.query("select * from " + tableName, h);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,7 +87,8 @@ public class BaseDao<T> {
         Class tClass = t.getClass();
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-
+        StringBuilder sql = new StringBuilder("insert into ");
+        sql.append(tableName).append(" values(");
         try {
             ArrayList<String> strings = new ArrayList<>();
             Field[] args = t.getClass().getDeclaredFields();
@@ -85,9 +97,17 @@ public class BaseDao<T> {
                 String col = arg.getName();
                 String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
                 Method method = t.getClass().getDeclaredMethod(methodN);
-                strings.add(method.invoke(t).toString());
+                if (method.invoke(t) == null)
+                    sql.append("null,");
+                else {
+                    strings.add(method.invoke(t).toString());
+                    sql.append("?,");
+                }
             }
-            runner.update("insert into " + tableName + " values(?,?,?,?)", strings.toArray());
+            sql.delete(sql.lastIndexOf(","), sql.length());
+            sql.append(")");
+            System.out.println(sql.toString());
+            runner.update(sql.toString(), strings.toArray());
 
         } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -107,7 +127,6 @@ public class BaseDao<T> {
             }
             query.delete(query.lastIndexOf("||"), query.length());
             statement = connection.prepareStatement(query.toString());
-            System.out.println(query.toString());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,16 +136,14 @@ public class BaseDao<T> {
     }
 
 
-
     public boolean checkExsistence(String colName, Object o, Class<T> tClass) {
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-
+        RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         try {
             T query = runner.query(
                     "select * from " + tableName + " where " + colName + "=?"
-                    , new BeanHandler<>(tClass), "caterpillar");
-            System.out.println(query);
+                    , new BeanHandler<>(tClass, processor), "caterpillar");
             if (query != null)
                 return true;
         } catch (SQLException e) {
@@ -140,11 +157,13 @@ public class BaseDao<T> {
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         TableAnnotation annotation = tClass.getAnnotation(TableAnnotation.class);
         String tableName = annotation.value();
-        colName = annotation.keyName();
+        System.out.println(tableName + "," + colName + "," + o);
+        RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         try {
             T query = runner.query(
-                    "select * from " + tableName + " where ?=?"
-                    , new BeanHandler<>(tClass), colName, o);
+                    "select * from " + tableName + " where " + colName + " = ? "
+                    , new BeanHandler<>(tClass, processor), o.toString());
+            System.out.println(query);
             if (query != null)
                 return query;
         } catch (SQLException e) {
@@ -163,9 +182,6 @@ public class BaseDao<T> {
             method.invoke(o, results.getObject(col));
         }
     }
-
-
-
 
 
     private String getTableName(Class<T> tClass) {

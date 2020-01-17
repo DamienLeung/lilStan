@@ -6,6 +6,7 @@ import dfbz.com.service.UserService;
 import dfbz.com.util.MailUtil;
 
 import javax.mail.MessagingException;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +27,11 @@ public class LoginServlet extends BaseServlet {
         String username = req.getParameter("form-username");
         String password = req.getParameter("form-password");
         String check = req.getParameter("remem-me");
-        System.out.println(username);
-        System.out.println(password);
         if (username != null && password != null) {
             String path = req.getContextPath();
             Integer id = service.validateUser(new User(username, password));
             if (id != null) {
-//                service.updateInfo(new Date(), id);
+                service.updateInfo(id);
                 if (check != null) {
                     Cookie cookie = new Cookie("username", username);
                     cookie.setMaxAge(MAX_COOKIE_TIME);
@@ -51,21 +50,20 @@ public class LoginServlet extends BaseServlet {
 
     }
 
-    public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String username = req.getParameter("form-username");
         String password = req.getParameter("form-password");
         String email = req.getParameter("form-email");
         boolean b1 = service.checkExsistence("username", username);
         boolean b2 = service.checkExsistence("email", email);
-        System.out.println(b1 + "," + b2);
         if (b1) {
             req.getSession().setAttribute("regErrorMsg", "用戶已存在");
-            resp.sendRedirect(req.getContextPath() + "/register.jsp");
+            req.getRequestDispatcher(req.getContextPath() + "/register.jsp").forward(req, resp);
         }
         else {
             if (b2) {
                 req.getSession().setAttribute("regErrorMsg", "郵箱已存在");
-                resp.sendRedirect(req.getContextPath() + "/register.jsp");
+                req.getRequestDispatcher(req.getContextPath() + "/register.jsp").forward(req, resp);
             }
             else {
                 int id = service.getId() + 1;

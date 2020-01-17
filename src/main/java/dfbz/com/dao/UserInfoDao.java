@@ -1,14 +1,16 @@
 package dfbz.com.dao;
 
+import dfbz.com.annotation.FieldAnnotation;
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.base.BaseDao;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
-import dfbz.com.util.JDBCUtil;
-import org.apache.commons.dbutils.QueryRunner;
+
+import javax.xml.crypto.Data;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserInfoDao extends BaseDao<UserInfo> {
@@ -20,23 +22,35 @@ public class UserInfoDao extends BaseDao<UserInfo> {
             String id = getId.invoke(user).toString();
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(Integer.parseInt(id));
-            userInfo.setRegisterTime(new Date());
-
+            System.out.println(new Date().toString());
+            Date time = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = format.format(time);
+            String now = format.format(time);
+            userInfo.setRegisterTime(date);
+            userInfo.setLoginTime(now);
+            System.out.println(userInfo);
+            add(userInfo);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
-    public void update(Date date, Integer id) {
-        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-        Class tClass = UserInfo.class;
-        String tableName = getTableName(tClass);
-        UserInfo info = new UserInfo();
-        Field field;
-        TableAnnotation annotation = UserInfo.class.getAnnotation(TableAnnotation.class);
-        String colName = annotation.key();
-        info = rowQuery(colName, id, UserInfo.class);
-        info.setLoginTime(new Date());
+    public void update(Integer id) {
+        try {
+            Field field = UserInfo.class.getDeclaredField("userId");
+            String colName = field.getAnnotation(FieldAnnotation.class).value();
+            UserInfo userInfo = rowQuery(colName, id, UserInfo.class);
+
+            Date time = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String now = format.format(time);
+            userInfo.setLoginTime(now);
+            save(userInfo);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

@@ -23,17 +23,14 @@ public class LoginFilter implements Filter {
         if (cookies != null && cookies.length > 0) {
             boolean b = false;
             for (Cookie cookie : cookies) {
-                System.out.println(0);
                 if (cookie.getName().equals("username")) {
                     b = true;
                     break;
                 }
             }
             if (b) {
-                System.out.println(1);
                 resp.sendRedirect(req.getContextPath() + "/user/home");
             } else {
-                System.out.println(2);
                 chain.doFilter(req, resp);
             }
         }

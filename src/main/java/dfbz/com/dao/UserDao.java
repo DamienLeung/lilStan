@@ -10,6 +10,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 
 import javax.xml.crypto.Data;
 import java.lang.reflect.Field;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDao extends BaseDao<User> {
+
+    private static final int MAX_PAGE_SIZE = 5;
 
     public Integer validateUser(User user) {
         String tableName = getTableName();
@@ -50,10 +53,10 @@ public class UserDao extends BaseDao<User> {
         String tableName = getTableName();
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
-            ResultSetHandler<List<String>> h = new BeanListHandler<>(String.class);
-            List<String> list = runner.query("select id from " + tableName, h);
-            System.out.println(list.size());
-            return list.size();
+
+            List<Map<String, Object>> list = runner.query("select id from " + tableName + " order by id", new MapListHandler());
+            System.out.println(list.get(list.size() - 1).get("id").toString());
+            return Integer.parseInt(list.get(list.size() - 1).get("id").toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,5 +112,27 @@ public class UserDao extends BaseDao<User> {
     private String getTableName() {
         TableAnnotation annotation = User.class.getAnnotation(TableAnnotation.class);
         return annotation.value();
+    }
+
+    public List<Map<String, Object>> listMap(int page) {
+        StringBuilder sql = new StringBuilder("select u.id as id, u.real_name as realName" +
+                ", ui.gender, ui.age, u.username, ui.desc");
+        String tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
+        sql.append(" from ").append(tableName);
+        tableName = getTableName();
+        sql.append(" left join ").append(tableName);
+        sql.append(" on ui.user_id = u.id order by u.id");
+        sql.append(" limit ?,?");
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+
+        try {
+            List<Map<String, Object>> map =
+                    runner.query(sql.toString(), new MapListHandler()
+                            ,(page - 1) * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE);
+            return map;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

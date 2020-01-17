@@ -18,7 +18,7 @@ public class UserInfo {
     @FieldAnnotation("user_id")
     private Integer userId;
 
-    public Integer getId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -50,11 +50,11 @@ public class UserInfo {
         this.phone = phone;
     }
 
-    public char getGender() {
+    public Character getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(Character gender) {
         this.gender = gender;
     }
 
@@ -66,19 +66,19 @@ public class UserInfo {
         this.desc = desc;
     }
 
-    public Date getRegisterTime() {
+    public String getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Date registerTime) {
+    public void setRegisterTime(String registerTime) {
         this.registerTime = registerTime;
     }
 
-    public Date getLoginTime() {
+    public String getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Date loginTime) {
+    public void setLoginTime(String loginTime) {
         this.loginTime = loginTime;
     }
 
@@ -117,7 +117,7 @@ public class UserInfo {
     /**
      * Gender:‘0’-M  ‘1’-F
      */
-    private char gender;
+    private Character gender;
 
     /**
      * Description
@@ -128,13 +128,13 @@ public class UserInfo {
      * Register time
      */
     @FieldAnnotation("register_time")
-    private Date registerTime;
+    private String registerTime;
 
     /**
      * Last login time
      */
     @FieldAnnotation("login_time")
-    private Date loginTime;
+    private String loginTime;
 
     /**
      * Avatar address
@@ -149,4 +149,19 @@ public class UserInfo {
     public UserInfo() {
     }
 
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userId=" + userId +
+                ", realName='" + realName + '\'' +
+                ", age=" + age +
+                ", phone='" + phone + '\'' +
+                ", gender=" + gender +
+                ", desc='" + desc + '\'' +
+                ", registerTime=" + registerTime +
+                ", loginTime=" + loginTime +
+                ", pic='" + pic + '\'' +
+                ", look=" + look +
+                '}';
+    }
 }
