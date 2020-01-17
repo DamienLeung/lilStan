@@ -1,4 +1,4 @@
-package dfbz.com.controller.user;
+package dfbz.com.controller.view;
 
 import dfbz.com.controller.BaseServlet;
 import dfbz.com.service.UserService;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebServlet("/user/home")
+@WebServlet("/view/home")
 public class UIServlet extends BaseServlet {
 
     UserService service = new UserService();

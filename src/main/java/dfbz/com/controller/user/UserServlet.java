@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/user/user/*")
+@WebServlet("/user/*")
 public class UserServlet extends BaseServlet {
 
     private UserService service = new UserService();

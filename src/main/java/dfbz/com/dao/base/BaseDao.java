@@ -5,6 +5,7 @@ import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
+import dfbz.com.util.MappingVarToColName;
 import org.apache.commons.dbutils.*;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -54,7 +55,7 @@ public class BaseDao<T> {
                 method = t.getClass().getDeclaredMethod(methodN);
                 if (method.invoke(t) != null) {
 
-                    query.append(col).append("=");
+                    query.append("`").append(MappingVarToColName.mappingName(col)).append("`=");
                     strings.add(method.invoke(t).toString());
                     query.append("?,");
                 }
@@ -193,4 +194,5 @@ public class BaseDao<T> {
         TableAnnotation annotation = tClass.getAnnotation(TableAnnotation.class);
         return annotation.value();
     }
+
 }

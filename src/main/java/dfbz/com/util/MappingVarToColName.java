@@ -1,10 +1,8 @@
-import org.junit.Test;
+package dfbz.com.util;
 
-public class test01 {
+public class MappingVarToColName {
 
-    @Test
-    public void mappingName() {
-        String s = "registerTime";
+    public static String mappingName(String s) {
         StringBuilder name = new StringBuilder(s);
         char[] chars = s.toCharArray();
         int i = 0;
@@ -16,7 +14,6 @@ public class test01 {
             }
             i ++;
         }
-        System.out.println(chars);
-        System.out.println(name.toString());
+        return name.toString();
     }
 }

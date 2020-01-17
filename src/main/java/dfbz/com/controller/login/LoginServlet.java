@@ -39,7 +39,7 @@ public class LoginServlet extends BaseServlet {
                     resp.addCookie(cookie);
                 }
                 req.getSession().setAttribute("userId", id);
-                resp.sendRedirect(path + "/user/home");
+                resp.sendRedirect(path + "/view/home");
             } else
                 resp.sendRedirect(req.getContextPath() + "/index.jsp");
         }
