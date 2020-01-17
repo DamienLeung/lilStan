@@ -48,12 +48,11 @@ public class BaseDao<T> {
             for (Field arg :
                     args) {
                 String col = arg.getName();
-                query.append(col).append("=");
+
                 String methodN = "get" + col.substring(0, 1).toUpperCase() + col.substring(1);
                 Method method = t.getClass().getDeclaredMethod(methodN);
-                if (method.invoke(t) == null)
-                    query.append("null ");
-                else {
+                if (method.invoke(t) != null) {
+                    query.append(col).append("=");
                     strings.add(method.invoke(t).toString());
                     query.append("? ");
                 }
@@ -63,11 +62,14 @@ public class BaseDao<T> {
             else
                 query.append(" where id=").append(id.toString());
             System.out.println(query);
+            System.out.println(strings);
             runner.update(query.toString(), strings);
-
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | SQLException e) {
-            e.printStackTrace();
+        } catch (NoSuchMethodException | IllegalAccessException
+                | InvocationTargetException | SQLException e1) {
+            e1.printStackTrace();
         }
+
+
     }
 
     public List<T> getListById(Class<T> tClass) {
@@ -143,7 +145,7 @@ public class BaseDao<T> {
         try {
             T query = runner.query(
                     "select * from " + tableName + " where " + colName + "=?"
-                    , new BeanHandler<>(tClass, processor), "caterpillar");
+                    , new BeanHandler<>(tClass, processor), o);
             if (query != null)
                 return true;
         } catch (SQLException e) {
@@ -162,7 +164,7 @@ public class BaseDao<T> {
         try {
             T query = runner.query(
                     "select * from " + tableName + " where " + colName + " = ? "
-                    , new BeanHandler<>(tClass, processor), o.toString());
+                    , new BeanHandler<>(tClass, processor), o);
             System.out.println(query);
             if (query != null)
                 return query;

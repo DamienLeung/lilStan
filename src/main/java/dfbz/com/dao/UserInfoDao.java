@@ -24,11 +24,9 @@ public class UserInfoDao extends BaseDao<UserInfo> {
             userInfo.setUserId(Integer.parseInt(id));
             System.out.println(new Date().toString());
             Date time = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String date = format.format(time);
-            String now = format.format(time);
-            userInfo.setRegisterTime(date);
-            userInfo.setLoginTime(now);
+            System.out.println(new java.sql.Date(time.getTime()));
+            userInfo.setRegisterTime(new java.sql.Date(time.getTime()));
+            userInfo.setLoginTime(new java.sql.Date(time.getTime()));
             System.out.println(userInfo);
             add(userInfo);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -41,11 +39,10 @@ public class UserInfoDao extends BaseDao<UserInfo> {
             Field field = UserInfo.class.getDeclaredField("userId");
             String colName = field.getAnnotation(FieldAnnotation.class).value();
             UserInfo userInfo = rowQuery(colName, id, UserInfo.class);
-
+            System.out.println(userInfo);
             Date time = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String now = format.format(time);
-            userInfo.setLoginTime(now);
+            System.out.println(time);
+            userInfo.setLoginTime(new java.sql.Date(time.getTime()));
             save(userInfo);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

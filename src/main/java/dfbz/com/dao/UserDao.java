@@ -67,7 +67,7 @@ public class UserDao extends BaseDao<User> {
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         Map<String, Object> map;
         try {
-            map =  runner.query("select i.real_name, d.`name` as dept_name from user_info i " +
+            map =  runner.query("select i.real_name as realName, d.name as deptName, u.username as username from user_info i " +
                             "left join user u " +
                             "on u.id = i.user_id " +
                             "left join dept d " +
