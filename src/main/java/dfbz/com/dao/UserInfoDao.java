@@ -65,7 +65,7 @@ public class UserInfoDao extends BaseDao<UserInfo> {
         String tableName = getTableName(UserInfo.class);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
-            List<Map<String, Object>> list = runner.query("select id from " + tableName + " order by id", new MapListHandler());
+            List<Map<String, Object>> list = runner.query("select user_id from " + tableName + " order by user_id", new MapListHandler());
             return list.size();
         } catch (SQLException e) {
             e.printStackTrace();

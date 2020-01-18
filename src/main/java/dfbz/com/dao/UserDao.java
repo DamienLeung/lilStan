@@ -113,21 +113,21 @@ public class UserDao extends BaseDao<User> {
     }
 
     public List<Map<String, Object>> listMap(int page) {
-        StringBuilder sql = new StringBuilder("select u.id as id, ui.real_name as realName" +
+        StringBuilder sql = new StringBuilder("select ui.user_id as id, ui.real_name as realName" +
                 ", ui.gender, ui.age, u.username, ui.`desc` ");
         String tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" ui ");
         tableName = getTableName();
         sql.append("left join ").append(tableName).append(" u ");
-        sql.append("on ui.user_id = u.id order by u.id ");
+        sql.append("on ui.user_id = u.id order by ui.user_id ");
         sql.append("limit ?,?");
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
 
         try {
             List<Map<String, Object>> map =
                     runner.query(sql.toString(), new MapListHandler()
-                            ,(page - 1) * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE);
-            System.out.println(map);
+                            ,(page - 1) * MAX_PAGE_SIZE, MAX_PAGE_SIZE);
+            System.out.println(page);
             return map;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -28,7 +28,8 @@
     <nav id="sidebar">
         <!-- Sidebar Header-->
         <div class="sidebar-header d-flex align-items-center">
-            <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..."
+                                                 class="img-fluid rounded-circle"></div>
             <div class="title">
                 <h1 class="h5">${sessionScope.userInfo.username}</h1>
                 <p>${sessionScope.userInfo.deptName}</p>
@@ -37,9 +38,10 @@
         <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
         <ul class="list-unstyled">
             <li><a href="home.jsp"> <i class="icon-home"></i>主页 </a></li>
-            <li><a href="#userDropdown"  data-toggle="collapse" aria-expanded="true"> <i class="icon-windows"></i>用户列表</a>
+            <li><a href="#userDropdown" data-toggle="collapse" aria-expanded="true"> <i
+                    class="icon-windows"></i>用户列表</a>
                 <ul id="userDropdown" class="collapse show">
-                    <li class="active"><a href="user.jsp">查看用户</a></li>
+                    <li class="active"><a href="<c:url value="/user/page"/>">查看用户</a></li>
                     <li><a href="my_user.html">我关注的用户</a></li>
                     <li><a href="article.html">发布文章</a></li>
                     <li><a href="article_collect.html">我的收藏</a></li>
@@ -47,7 +49,7 @@
             </li>
             <!--<li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>-->
 
-            <li><a href="#depDropdown"  data-toggle="collapse"> <i class="icon-windows2"></i>部门列表</a>
+            <li><a href="#depDropdown" data-toggle="collapse"> <i class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse list-unstyled ">
                     <li><a href="department.html">全部部门</a></li>
                     <li><a href="meeting.html">会议系统</a></li>
@@ -92,28 +94,31 @@
                     </thead>
                     <tbody>
                     <c:forEach var="user" items="${sessionScope.userList}">
-                    <tr>
-                        <th scope="row">${user.id}</th>
-                        <td>${user.realName==null?user.username:user.realName}</td>
-                        <td>
-                            <%--if--%><c:if test="${user.gender==0}">
-                                男
-                            <%--else--%></c:if> <c:if test="${user.gender==1}">
-                                女
-                            </c:if>
-                        </td>
-                        <td>${user.age}</td>
-                        <td>${user.desc}</td>
-                        <td>
-                            <input type="submit" value="详细信息" class="btn btn-xs btn-primary userDetail">
-                        </td>
+                        <tr>
+                            <th scope="row">${user.id}</th>
+                            <td>${user.realName==null?user.username:user.realName}</td>
+                            <td>
+                                    <%--if--%>
+                                <c:if test="${user.gender==0}">
+                                    男
+                                </c:if>
+                                    <%--else--%>
+                                <c:if test="${user.gender==1}">
+                                    女
+                                </c:if>
+                            </td>
+                            <td>${user.age}</td>
+                            <td>${user.desc}</td>
+                            <td>
+                                <input type="submit" value="详细信息" class="btn btn-xs btn-primary userDetail">
+                            </td>
 
-                        <td>
+                            <td>
 
-                            <input type="checkbox" value="" class="checkbox-template">
+                                <input type="checkbox" value="" class="checkbox-template">
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     </c:forEach>
 
                     </tbody>
@@ -126,14 +131,10 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <%--<c:forEach var="index" varStatus="" begin="" end="endPage">
-                            <li><a href="#">index</a></li>
-                        </c:forEach>--%>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        <c:forEach var="index" varStatus="status" begin="${requestScope.startPage}"
+                                   end="${requestScope.endPage}" step="1">
+                            <li><a href="<c:url value="/user/page?page=${index}"/>">${index}</a></li>
+                        </c:forEach>
                         <li>
                             <a href="#" aria-label="Next" id="nextPage">
                                 <span aria-hidden="true">&raquo;</span>
@@ -147,7 +148,7 @@
         <footer class="footer">
             <div class="footer__block block no-margin-bottom">
                 <div class="container-fluid text-center">
-                    <p class="no-margin-bottom">Copyright &copy; 2019.Company <a href="#" >东方标准</a> </p>
+                    <p class="no-margin-bottom">Copyright &copy; 2019.Company <a href="#">东方标准</a></p>
                 </div>
             </div>
         </footer>
@@ -156,10 +157,10 @@
 
 <!-- JavaScript files-->
 <script src="../assets/vendor/jquery/jquery.min.js"></script>
-<script src="../assets/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="../assets/vendor/popper.js/umd/popper.min.js"></script>
 <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../assets/bootstrap/js/bootstrap-switch.min.js"></script>
-<script src="../assets/vendor/jquery.cookie/jquery.cookie.js"> </script>
+<script src="../assets/vendor/jquery.cookie/jquery.cookie.js"></script>
 <script src="../assets/vendor/chart.js/Chart.min.js"></script>
 <script src="../assets/js/layer.js"></script>
 <script src="../assets/vendor/jquery-validation/jquery.validate.min.js"></script>
