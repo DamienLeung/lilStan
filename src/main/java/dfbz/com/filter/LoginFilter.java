@@ -29,7 +29,9 @@ public class LoginFilter implements Filter {
                 }
             }
             if (b) {
-                resp.sendRedirect(req.getContextPath() + "/user/home");
+                Object obj = req.getSession().getAttribute("userId");
+                if (obj != null)
+                    resp.sendRedirect(req.getContextPath() + "/view/home");
             } else {
                 chain.doFilter(req, resp);
             }

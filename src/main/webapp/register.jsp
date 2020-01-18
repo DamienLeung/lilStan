@@ -78,10 +78,7 @@
 </div>
 
 <script>
-    $("#register").click(function () {
-        if (${sessionScope.regErrorMsg} != null || ${sessionScope.regErrorMsg} !== "")
-            alert(${sessionScope.regErrorMsg});
-    })
+
 </script>
 
 <!-- Javascript -->

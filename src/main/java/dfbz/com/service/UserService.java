@@ -4,7 +4,6 @@ import dfbz.com.dao.UserDao;
 import dfbz.com.dao.UserInfoDao;
 import dfbz.com.pojo.User;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,5 +46,13 @@ public class UserService {
             }
         }
         return map;
+    }
+
+    public List<Map<String, Object>> getUsers(int pageN) {
+        return dao.listMap(pageN);
+    }
+
+    public int getInfoListSize() {
+        return infoDao.getListSize();
     }
 }

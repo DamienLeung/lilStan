@@ -75,7 +75,7 @@ public class BaseDao<T> {
 
 
     }
-
+/*
     public List<T> getListById(Class<T> tClass) {
         String tableName = getTableName(tClass);
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
@@ -87,7 +87,7 @@ public class BaseDao<T> {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     public void add(T t) {
         Class tClass = t.getClass();

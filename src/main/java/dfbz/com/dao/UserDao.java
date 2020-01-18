@@ -67,9 +67,7 @@ public class UserDao extends BaseDao<User> {
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         Map<String, Object> map;
         try {
-            map =  runner.query("select i.real_name as realName, d.name as deptName, u.username as username from user_info i " +
-                            "left join user u " +
-                            "on u.id = i.user_id " +
+            map =  runner.query("select d.name as deptName, u.username as username from user u " +
                             "left join dept d " +
                             "on d.id = u.dept_id " +
                             "where u.id=?;"
@@ -115,24 +113,28 @@ public class UserDao extends BaseDao<User> {
     }
 
     public List<Map<String, Object>> listMap(int page) {
-        StringBuilder sql = new StringBuilder("select u.id as id, u.real_name as realName" +
-                ", ui.gender, ui.age, u.username, ui.desc");
+        StringBuilder sql = new StringBuilder("select u.id as id, ui.real_name as realName" +
+                ", ui.gender, ui.age, u.username, ui.`desc` ");
         String tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
-        sql.append(" from ").append(tableName);
+        sql.append("from ").append(tableName).append(" ui ");
         tableName = getTableName();
-        sql.append(" left join ").append(tableName);
-        sql.append(" on ui.user_id = u.id order by u.id");
-        sql.append(" limit ?,?");
+        sql.append("left join ").append(tableName).append(" u ");
+        sql.append("on ui.user_id = u.id order by u.id ");
+        sql.append("limit ?,?");
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
 
         try {
             List<Map<String, Object>> map =
                     runner.query(sql.toString(), new MapListHandler()
                             ,(page - 1) * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE);
+            System.out.println(map);
             return map;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
+
 }

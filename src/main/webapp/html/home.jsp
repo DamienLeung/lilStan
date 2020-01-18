@@ -28,8 +28,8 @@
             <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..."
                                                  class="img-fluid rounded-circle"></div>
             <div class="title">
-                <h1 class="h5">${sessionScope.userInfo.realName == null?sessionScope.useInfo.username:sessionScope.userInfo.realName}</h1>
-                <p>${sessionScope.userInfo.dept_name}</p>
+                <h1 class="h5">${sessionScope.userInfo.username}</h1>
+                <p>${sessionScope.userInfo.deptName}</p>
             </div>
         </div>
         <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
@@ -37,7 +37,7 @@
             <li class="active"><a href="home.jsp"> <i class="icon-home"></i>主页 </a></li>
             <li><a href="#userDropdown" data-toggle="collapse"> <i class="icon-windows"></i>用户列表</a>
                 <ul id="userDropdown" class="collapse list-unstyled ">
-                    <li><a href="user.html">查看用户</a></li>
+                    <li><a href="<c:url value="/user/page"/>">查看用户</a></li>
                     <li><a href="my_user.html">我关注的用户</a></li>
                     <li><a href="article.html">发布文章</a></li>
                     <li><a href="article_collect.html">我的收藏</a></li>

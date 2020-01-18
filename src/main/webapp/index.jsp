@@ -23,9 +23,6 @@
 </head>
 <body>
 
-<%
-
-%>
 
 <div class="container myBox">
     <div class="col-xs-8 col-xs-offset-4 col-sm-6 col-sm-offset-3 form-box">
