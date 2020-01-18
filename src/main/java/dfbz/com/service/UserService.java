@@ -1,8 +1,10 @@
 package dfbz.com.service;
 
 import dfbz.com.dao.UserDao;
+import dfbz.com.dao.UserFocusDao;
 import dfbz.com.dao.UserInfoDao;
 import dfbz.com.pojo.User;
+import dfbz.com.pojo.UserFocus;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ public class UserService {
 
     private UserDao dao = new UserDao();
     private UserInfoDao infoDao = new UserInfoDao();
+    private UserFocusDao userFocusDao = new UserFocusDao();
 
     public Integer validateUser(User user) {
         return dao.validateUser(user);
@@ -21,8 +24,8 @@ public class UserService {
         infoDao.register(user);
     }
 
-    public void updateInfo(Integer id) {
-        infoDao.update(id);
+    public void updateLoginTime(Integer id) {
+        infoDao.updateLoginTime(id);
     }
 
     public int getId() {
@@ -54,5 +57,17 @@ public class UserService {
 
     public int getInfoListSize() {
         return infoDao.getListSize();
+    }
+
+    public void delFav(String uId) {
+        userFocusDao.del(uId);
+    }
+
+    public User getUserByEmail(String email) {
+        return dao.rowQuery("email", email, User.class);
+    }
+
+    public void update(User user) {
+        dao.save(user);
     }
 }

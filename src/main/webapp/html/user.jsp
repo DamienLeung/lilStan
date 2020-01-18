@@ -115,7 +115,7 @@
 
                             <td>
 
-                                <input type="checkbox" value="" class="checkbox-template">
+                                <input type="checkbox"  value="" class="checkbox-template">
 
                             </td>
                         </tr>

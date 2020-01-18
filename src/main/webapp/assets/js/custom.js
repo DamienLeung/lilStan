@@ -43,8 +43,17 @@ $(function () {
 
     $(".table").find("input[type='checkbox']").on("click", function () {
         if ($(this).prop("checked")) {
-            layer.msg("关注成功")
+            var uId = $(this).attr("data-uid");
+            var aId = $("#userId").val;
+            if(uId === aId)
+                layer.msg("不能關注自己");
+            else {
+                $.post
+                layer.msg("关注成功");
+            }
+
         } else {
+
             layer.msg("取关成功")
 
         }

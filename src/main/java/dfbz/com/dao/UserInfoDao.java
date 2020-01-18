@@ -39,7 +39,7 @@ public class UserInfoDao extends BaseDao<UserInfo> {
         }
     }
 
-    public void update(Integer id) {
+    public void updateLoginTime(Integer id) {
         try {
             Field field = UserInfo.class.getDeclaredField("userId");
             String colName = field.getAnnotation(FieldAnnotation.class).value();

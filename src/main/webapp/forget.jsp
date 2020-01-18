@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,7 @@
             </div>
         </div>
         <div class="form-bottom">
-            <form role="form" action="#" method="post" class="login-form">
+            <form role="form" action="<c:url value="/login/resetPassword"/>" method="post" class="login-form">
 
                 <!--上面的输入框尽可能不需要外边距，使用row解决-->
                 <div class="row">
@@ -45,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">验证码</label>
-                        <input type="text" name="form-password" placeholder="验证码" class="form-control">
+                        <input type="text" name="form-code" placeholder="验证码" class="form-control">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="form-password">Password</label>
@@ -56,15 +57,16 @@
                 <!--上面的输入框尽可能不需要外边距，使用row包裹起来解决-->
 
                 <!--<div class="checkbox">-->
-                    <!--<label>-->
-                        <!--<input type="checkbox"> 记住我-->
-                    <!--</label>-->
+                <!--<label>-->
+                <!--<input type="checkbox"> 记住我-->
+                <!--</label>-->
                 <!--</div>-->
                 <button type="submit" class="btn">重置</button>
 
                 <div class="row">
                     <div style="padding: 10px 25px">
-                        <div style="display: inline-block;float: left" class="text-left"><a href="index.jsp">返回登录</a></div>
+                        <div style="display: inline-block;float: left" class="text-left"><a href="index.jsp">返回登录</a>
+                        </div>
                         <!--<div style="display: inline-block;float: right" class="text-right"><a href="#">没有账号?</a></div>-->
                     </div>
                 </div>
@@ -75,6 +77,12 @@
 </div>
 
 
+<!-- Javascript -->
+<script src="assets/js/jquery-1.11.1.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/jquery.backstretch.min.js"></script>
+<script src="assets/js/scripts.js"></script>
+
 <script>
     $(function () {
         $("#send").click(function () {
@@ -83,15 +91,12 @@
                 alert("請輸入郵箱地址");
                 return;
             }
-            $.post(${}"/login/sendCodeEmail", email)
+            console.log(email);
+            $.post("/login/sendCodeEmail", {Email: email}, function (data) {
+                alert(data);
+            })
         })
     })
 </script>
-
-<!-- Javascript -->
-<script src="assets/js/jquery-1.11.1.min.js"></script>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/jquery.backstretch.min.js"></script>
-<script src="assets/js/scripts.js"></script>
 </body>
 </html>

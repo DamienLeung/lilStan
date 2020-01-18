@@ -31,7 +31,7 @@ public class User {
      * 0：Public (Default)
      */
     @FieldAnnotation("is_secret")
-    private Character isSecret;
+    private String isSecret;
 
     /**
      * Email Address
@@ -68,11 +68,11 @@ public class User {
         this.password = password;
     }
 
-    public Character getIsSecret() {
+    public String getIsSecret() {
         return isSecret;
     }
 
-    public void setIsSecret(Character isSecret) {
+    public void setIsSecret(String isSecret) {
         this.isSecret = isSecret;
     }
 
@@ -102,11 +102,11 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.isSecret = '0';
+        this.isSecret = "0";
         this.deptId = null;
     }
 
-    public User(Integer id, String username, String password, Character isSecret, String email, Integer deptId) {
+    public User(Integer id, String username, String password, String isSecret, String email, Integer deptId) {
         this.id = id;
         this.username = username;
         this.password = password;
