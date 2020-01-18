@@ -68,10 +68,11 @@
         </div>
         <section class="no-padding-bottom">
             <div class="title">
-                <form class="form-inline">
+                <form class="form-inline" action="<c:url value="/user/searchUser"/>">
                     <div class="form-group">
                         <label for="inlineFormInput" class="sr-only">Name</label>
-                        <input id="inlineFormInput" type="text" placeholder="按名字查找" class="mr-sm-3 form-control">
+                        <input name="pattern" id="inlineFormInput" type="text" placeholder="按名字查找"
+                               value="${requestScope.pattern}" class="mr-sm-3 form-control">
                     </div>
                     <div class="form-group">
                         <input type="submit" value="查询" class="btn btn-primary">
@@ -133,7 +134,12 @@
                         </li>
                         <c:forEach var="index" varStatus="status" begin="${requestScope.startPage}"
                                    end="${requestScope.endPage}" step="1">
-                            <li><a href="<c:url value="/user/page?page=${index}"/>">${index}</a></li>
+                            <c:if test="${requestScope.pattern == null}">
+                                <li><a href="<c:url value="/user/page?page=${index}"/>">${index}</a></li>
+                            </c:if>
+                            <c:if test="${requestScope.pattern != null}">
+                                <li><a href="<c:url value="/user/searchUser?pattern=${requestScope.pattern}&&page=${index}"/>">${index}</a></li>
+                            </c:if>
                         </c:forEach>
                         <li>
                             <a href="#" aria-label="Next" id="nextPage">

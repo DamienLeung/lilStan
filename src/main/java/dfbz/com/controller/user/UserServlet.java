@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +22,11 @@ public class UserServlet extends BaseServlet {
     }
 
     public void showUsers(HttpServletRequest req, HttpServletResponse resp, int page) throws IOException, ServletException {
-        List<Map<String, Object>> users = service.getUsers(page);
+        List<Map<String, Object>> users = service.getUsers(page, null);
         req.setAttribute("currentPage", page);
 //        int pageN = 2;
-        int pageSize = service.getInfoListSize() % 5 == 0 ?
-                service.getInfoListSize() / 5 : service.getInfoListSize() / 5 + 1;
+        int pageSize = service.getInfoListSize(null) % 5 == 0 ?
+                service.getInfoListSize(null) / 5 : service.getInfoListSize(null) / 5 + 1;
         int startPage = (page - 1) / 5 * 5 + 1;
         req.setAttribute("startPage", startPage);
         if ((startPage + 4) < pageSize)
@@ -45,6 +46,51 @@ public class UserServlet extends BaseServlet {
             if (!page.equals(""))
                 pageNum = Integer.parseInt(page);
         showUsers(req, resp, pageNum);
+
+    }
+
+    public void searchUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+        int page = 1;
+        String pageString = req.getParameter("page");
+        if (pageString != null)
+            if (!pageString.equals(""))
+                page = Integer.parseInt(pageString);
+
+        String pattern = null;
+        try {
+            byte[] bytes = req.getParameter("pattern").getBytes("ISO-8859-1");
+            pattern = new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (pattern == null) {
+                resp.sendRedirect("/user/page");
+            }
+            else {
+                if (pattern.equals("")) {
+                    resp.sendRedirect("/user/page");
+                    return;
+                }
+                req.setAttribute("pattern", pattern);
+                List<Map<String, Object>> maps = service.getUsers(page, pattern);
+                int pageSize = service.getInfoListSize(pattern) % 5 == 0 ?
+                        service.getInfoListSize(pattern) / 5:
+                        service.getInfoListSize(pattern) / 5 + 1;
+                int startPage = (page - 1) / 5 * 5 + 1;
+                req.setAttribute("startPage", startPage);
+                if ((startPage + 4) < pageSize)
+                    req.setAttribute("endPage", startPage + 4);
+                else
+                    req.setAttribute("endPage", pageSize);
+                System.out.println(maps.size());
+                req.setAttribute("currentPage", page);
+                req.getSession().setAttribute("userList", maps);
+            }
+            req.getRequestDispatcher(req.getContextPath() + "/html/user.jsp").forward(req, resp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

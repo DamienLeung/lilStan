@@ -4,7 +4,6 @@ import dfbz.com.dao.UserDao;
 import dfbz.com.dao.UserFocusDao;
 import dfbz.com.dao.UserInfoDao;
 import dfbz.com.pojo.User;
-import dfbz.com.pojo.UserFocus;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +39,8 @@ public class UserService {
         return dao.checkExsistence(colName, o, User.class);
     }
 
-    public List<Map<String, Object>> findUserList(int page) {
-        List<Map<String, Object>> map = dao.listMap(page);
+    public List<Map<String, Object>> getUsers(int page, String pattern) {
+        List<Map<String, Object>> map = dao.listMap(page, pattern);
         for (Map<String, Object> row :
                 map) {
             if (row.get("realName") == null) {
@@ -51,12 +50,8 @@ public class UserService {
         return map;
     }
 
-    public List<Map<String, Object>> getUsers(int pageN) {
-        return dao.listMap(pageN);
-    }
-
-    public int getInfoListSize() {
-        return infoDao.getListSize();
+    public int getInfoListSize(String pattern) {
+        return infoDao.getListSize(pattern);
     }
 
     public void delFav(String uId) {
@@ -70,4 +65,5 @@ public class UserService {
     public void update(User user) {
         dao.save(user);
     }
+
 }

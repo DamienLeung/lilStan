@@ -56,17 +56,33 @@ public class UserInfoDao extends BaseDao<UserInfo> {
 
     }
 
-    private String getTableName(Class<UserInfo> tClass) {
+    private String getTableName(Class<?> tClass) {
         TableAnnotation annotation = tClass.getAnnotation(TableAnnotation.class);
         return annotation.value();
     }
 
-    public int getListSize() {
+    public int getListSize(String pattern) {
+        StringBuilder sql = new StringBuilder("select ui.user_id ");
         String tableName = getTableName(UserInfo.class);
+        sql.append("from ").append(tableName).append(" ui ");
+        tableName = getTableName(User.class);
+        sql.append("left join ").append(tableName).append(" u ");
+        sql.append("on ui.user_id = u.id ");
+        if (pattern != null) {
+            sql.append("where u.username like ? or ");
+            sql.append("ui.real_name like ? ");
+        }
+        sql.append("order by ui.user_id ");
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
-            List<Map<String, Object>> list = runner.query("select user_id from " + tableName + " order by user_id", new MapListHandler());
-            return list.size();
+            List<Map<String, Object>> map = null;
+            if (pattern == null) {
+                map = runner.query(sql.toString(), new MapListHandler());
+            } else {
+                map = runner.query(sql.toString(), new MapListHandler()
+                        , pattern + "%", pattern + "%");
+            }
+            return map.size();
         } catch (SQLException e) {
             e.printStackTrace();
         }
