@@ -34,6 +34,7 @@ public class UserServlet extends BaseServlet {
         else
             req.setAttribute("endPage", pageSize);
         req.setAttribute("currentPage", page);
+        req.setAttribute("maxPage", pageSize);
         req.getSession().setAttribute("userList", users);
 //        resp.sendRedirect(req.getContextPath() + "/html/user.jsp");
         req.getRequestDispatcher(req.getContextPath() + "/html/user.jsp").forward(req, resp);
@@ -66,8 +67,7 @@ public class UserServlet extends BaseServlet {
         try {
             if (pattern == null) {
                 resp.sendRedirect("/user/page");
-            }
-            else {
+            } else {
                 if (pattern.equals("")) {
                     resp.sendRedirect("/user/page");
                     return;
@@ -75,7 +75,7 @@ public class UserServlet extends BaseServlet {
                 req.setAttribute("pattern", pattern);
                 List<Map<String, Object>> maps = service.getUsers(page, pattern);
                 int pageSize = service.getInfoListSize(pattern) % 5 == 0 ?
-                        service.getInfoListSize(pattern) / 5:
+                        service.getInfoListSize(pattern) / 5 :
                         service.getInfoListSize(pattern) / 5 + 1;
                 int startPage = (page - 1) / 5 * 5 + 1;
                 req.setAttribute("startPage", startPage);
@@ -86,6 +86,7 @@ public class UserServlet extends BaseServlet {
                 System.out.println(maps.size());
                 req.setAttribute("currentPage", page);
                 req.getSession().setAttribute("userList", maps);
+                req.setAttribute("maxPage", pageSize);
             }
             req.getRequestDispatcher(req.getContextPath() + "/html/user.jsp").forward(req, resp);
         } catch (IOException e) {

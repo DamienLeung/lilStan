@@ -116,7 +116,7 @@
 
                             <td>
 
-                                <input type="checkbox"  value="" class="checkbox-template">
+                                <input type="checkbox" value="" class="checkbox-template">
 
                             </td>
                         </tr>
@@ -138,7 +138,9 @@
                                 <li><a href="<c:url value="/user/page?page=${index}"/>">${index}</a></li>
                             </c:if>
                             <c:if test="${requestScope.pattern != null}">
-                                <li><a href="<c:url value="/user/searchUser?pattern=${requestScope.pattern}&&page=${index}"/>">${index}</a></li>
+                                <li>
+                                    <a href="<c:url value="/user/searchUser?pattern=${requestScope.pattern}&&page=${index}"/>">${index}</a>
+                                </li>
                             </c:if>
                         </c:forEach>
                         <li>
@@ -176,7 +178,57 @@
 
 
 <script>
+    $("#prePage").click(function () {
+        var index = $(this).parent().siblings()[0];
+        var firstPage = $(index.firstChild).html();
+        var search = '${requestScope.pattern}';
+        if ('' === search) {
+            if (Number(firstPage) < 6) {
+                layer.msg("頁碼已經到頂了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/page?page=' + (Number(firstPage) - 1);
+            }
+        } else {
+            firstPage = index.innerText;
+            if (Number(firstPage) < 6) {
+                layer.msg("頁碼已經到頂了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + (Number(firstPage) - 1);
+            }
+        }
+    });
 
+    $("#nextPage").click(function () {
+        var index = $(this).parent().siblings()[1];
+        var firstPage = $(index.firstChild).html();
+        var search = '${requestScope.pattern}';
+        if ('' === search) {
+            if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+                layer.msg("頁碼已經到底了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/page?page=' + Number(Number(firstPage) + 5);
+            }
+            console.log();
+            <%--var search = '${requestScope.pattern}';--%>
+            <%--if ('' === search) {--%>
+            <%----%>
+            <%--} else {--%>
+            <%--window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + Number(Number(firstPage) + 5);--%>
+            <%--}--%>
+        } else {
+            firstPage = index.innerText;
+            if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+                layer.msg("頁碼已經到底了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + Number(Number(firstPage) + 5);
+            }
+        }
+
+    })
 </script>
 </body>
 </html>

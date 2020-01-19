@@ -212,5 +212,31 @@
 <script src="../assets/js/charts-home.js"></script>
 <script src="../assets/js/front.js"></script>
 <script src="../assets/js/custom.js"></script>
+
+<script>
+    console.log($('#myFile')[0].files[0]);
+    var file = $('#myFile')[0].files[0];
+
+    var formData = new FormData();
+    formData.append("file",file);
+
+    $.ajax({
+        url: basePath+'/user/uploadFile',
+        type:'POST',
+        data: formData,
+        processData : false, // 使数据不做处理
+        contentType : false, // 不要设置Content-Type请求头
+        success: function(data){
+            console.log(data);
+            if('fail' !== data){
+                $("#myPic").attr("src",data);
+                $("#myHeadPic").attr("src",data);
+            }
+        },
+        error:function(response){
+            console.log(response);
+        }
+    });
+</script>
 </body>
 </html>
