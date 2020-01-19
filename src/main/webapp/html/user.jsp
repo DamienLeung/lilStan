@@ -111,15 +111,18 @@
                             <td>${user.age}</td>
                             <td>${user.desc}</td>
                             <td>
-                                <input type="submit" data-userid="${user.id}" value="详细信息" class="btn btn-xs btn-primary userDetail">
+                                <input type="submit" data-userid="${user.id}" value="详细信息"
+                                       class="btn btn-xs btn-primary userDetail">
                             </td>
 
                             <td>
                                 <c:if test="${user.ufId == null}">
-                                    <input type="checkbox" data-ufid="${user.ufId}" data-uid="${user.id}" value="" class="checkbox-template">
+                                    <input type="checkbox" data-ufid="${user.ufId}" data-uid="${user.id}" value=""
+                                           class="checkbox-template">
                                 </c:if>
                                 <c:if test="${user.ufId != null}">
-                                    <input checked="checked" type="checkbox"  data-ufid="${user.ufId}" data-uid="${user.id}" value="" class="checkbox-template">
+                                    <input checked="checked" type="checkbox" data-ufid="${user.ufId}"
+                                           data-uid="${user.id}" value="" class="checkbox-template">
                                 </c:if>
                             </td>
                         </tr>
@@ -227,10 +230,10 @@
 
     })
 
-    $(".table").find("input[type='checkbox]").click(function () {
+    $(".table").find("input[type='checkbox']").on("click", function () {
         if ($(this).prop("checked")) {
-            var uId = $(this).attr("data-id");
-            var id = ${sessionScope.userId};
+            var uId = $(this).attr("data-uid");
+            var id = '${sessionScope.userId}';
             if (uId === id) {
                 $(this).click();
                 layer.msg("不能關注自己");
@@ -241,16 +244,15 @@
                     } else {
                         layer.msg(data);
                     }
-                });
-            } else {
-                var ufId = $(this).attr("data-ufId");
-                $.post("/user/unfollow", {ufId: ufId}, function(data) {
-                    if ("success" === data) {
-                        layer.msg("已取消關注");
-                    }
                 })
             }
-
+        } else {
+            var ufId = $(this).attr("data-ufId");
+            $.post("/user/unfollow", {ufId: ufId}, function (data) {
+                if ("success" === data) {
+                    layer.msg("已取消關注");
+                }
+            })
         }
     })
 </script>

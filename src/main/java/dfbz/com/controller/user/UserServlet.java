@@ -102,17 +102,28 @@ public class UserServlet extends BaseServlet {
             resp.setHeader("content-Type", "text/html");
             String userId = req.getSession().getAttribute("userId").toString();
             String uId = req.getParameter("uId");
+            System.out.println(userId + uId);
             if (uId != null) {
                 if (userId.equals(uId))
                     resp.getWriter().write("不能關注自己");
                 else {
                     service.follow(Integer.parseInt(uId), Integer.parseInt(userId));
+                    resp.getWriter().write("success");
                 }
             } else {
                 resp.getWriter().write("關注失敗");
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void unfollow(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String ufId = req.getParameter("ufId");
+        if (ufId != null) {
+            service.unfollow(Integer.parseInt(ufId));
+        } else {
+            resp.getWriter().write("請輸入ufId");
         }
     }
 }
