@@ -3,6 +3,7 @@ package dfbz.com.dao;
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.base.BaseDao;
 import dfbz.com.pojo.User;
+import dfbz.com.pojo.UserFocus;
 import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
@@ -112,14 +113,17 @@ public class UserDao extends BaseDao<User> {
         return annotation.value();
     }
 
-    public List<Map<String, Object>> listMap(int page, String pattern) {
+    public List<Map<String, Object>> listMap(int page, String pattern, Integer id) {
         StringBuilder sql = new StringBuilder("select ui.user_id as id, ui.real_name as realName" +
-                ", ui.gender, ui.age, u.username, ui.`desc` ");
+                ", ui.gender, ui.age, u.username, ui.`desc`, uf.id as ufId ");
         String tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" ui ");
         tableName = getTableName();
         sql.append("left join ").append(tableName).append(" u ");
         sql.append("on ui.user_id = u.id ");
+        tableName = UserFocus.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("left join ").append(tableName).append(" uf ");
+        sql.append("on ui.user_id = uf.user_focus_id and uf.user_id = ? ");
         if (pattern != null) {
             sql.append("where u.username like ? or ");
             sql.append("ui.real_name like ? ");
@@ -132,10 +136,10 @@ public class UserDao extends BaseDao<User> {
             List<Map<String, Object>> map = null;
             if (pattern == null) {
                 map = runner.query(sql.toString(), new MapListHandler()
-                                , (page - 1) * MAX_PAGE_SIZE, MAX_PAGE_SIZE);
+                                , id, (page - 1) * MAX_PAGE_SIZE, MAX_PAGE_SIZE);
             } else {
                  map = runner.query(sql.toString(), new MapListHandler()
-                                , pattern + "%", pattern + "%"
+                                , id, pattern + "%", pattern + "%"
                                 , (page - 1) * MAX_PAGE_SIZE, MAX_PAGE_SIZE);
             }
             return map;

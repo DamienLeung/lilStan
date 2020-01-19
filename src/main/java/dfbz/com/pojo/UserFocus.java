@@ -56,4 +56,9 @@ public class UserFocus {
     public UserFocus() {
     }
 
+    public UserFocus(Integer id, Integer userId, Integer userFocusId) {
+        this.id = id;
+        this.userId = userId;
+        this.userFocusId = userFocusId;
+    }
 }

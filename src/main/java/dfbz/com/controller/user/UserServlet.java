@@ -22,7 +22,8 @@ public class UserServlet extends BaseServlet {
     }
 
     public void showUsers(HttpServletRequest req, HttpServletResponse resp, int page) throws IOException, ServletException {
-        List<Map<String, Object>> users = service.getUsers(page, null);
+        String userId = req.getSession().getAttribute("userId").toString();
+        List<Map<String, Object>> users = service.getUsers(page, null, Integer.parseInt(userId));
         req.setAttribute("currentPage", page);
 //        int pageN = 2;
         int pageSize = service.getInfoListSize(null) % 5 == 0 ?
@@ -72,8 +73,9 @@ public class UserServlet extends BaseServlet {
                     resp.sendRedirect("/user/page");
                     return;
                 }
+                String userId = req.getSession().getAttribute("userId").toString();
                 req.setAttribute("pattern", pattern);
-                List<Map<String, Object>> maps = service.getUsers(page, pattern);
+                List<Map<String, Object>> maps = service.getUsers(page, pattern, Integer.parseInt(userId));
                 int pageSize = service.getInfoListSize(pattern) % 5 == 0 ?
                         service.getInfoListSize(pattern) / 5 :
                         service.getInfoListSize(pattern) / 5 + 1;
@@ -93,5 +95,24 @@ public class UserServlet extends BaseServlet {
             e.printStackTrace();
         }
 
+    }
+
+    public void follow(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            resp.setHeader("content-Type", "text/html");
+            String userId = req.getSession().getAttribute("userId").toString();
+            String uId = req.getParameter("uId");
+            if (uId != null) {
+                if (userId.equals(uId))
+                    resp.getWriter().write("不能關注自己");
+                else {
+                    service.follow(Integer.parseInt(uId), Integer.parseInt(userId));
+                }
+            } else {
+                resp.getWriter().write("關注失敗");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -39,8 +39,8 @@ public class UserService {
         return dao.checkExsistence(colName, o, User.class);
     }
 
-    public List<Map<String, Object>> getUsers(int page, String pattern) {
-        List<Map<String, Object>> map = dao.listMap(page, pattern);
+    public List<Map<String, Object>> getUsers(int page, String pattern, Integer id) {
+        List<Map<String, Object>> map = dao.listMap(page, pattern, id);
         for (Map<String, Object> row :
                 map) {
             if (row.get("realName") == null) {
@@ -54,8 +54,12 @@ public class UserService {
         return infoDao.getListSize(pattern);
     }
 
-    public void delFav(String uId) {
-        userFocusDao.del(uId);
+    public void unfollow(Integer ufId) {
+        userFocusDao.removeFav(ufId);
+    }
+
+    public void follow(Integer ufId, Integer id) {
+        userFocusDao.addFav(ufId, id);
     }
 
     public User getUserByEmail(String email) {

@@ -111,13 +111,16 @@
                             <td>${user.age}</td>
                             <td>${user.desc}</td>
                             <td>
-                                <input type="submit" value="详细信息" class="btn btn-xs btn-primary userDetail">
+                                <input type="submit" data-userid="${user.id}" value="详细信息" class="btn btn-xs btn-primary userDetail">
                             </td>
 
                             <td>
-
-                                <input type="checkbox" value="" class="checkbox-template">
-
+                                <c:if test="${user.ufId == null}">
+                                    <input type="checkbox" data-ufid="${user.ufId}" data-uid="${user.id}" value="" class="checkbox-template">
+                                </c:if>
+                                <c:if test="${user.ufId != null}">
+                                    <input checked="checked" type="checkbox"  data-ufid="${user.ufId}" data-uid="${user.id}" value="" class="checkbox-template">
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>
@@ -212,12 +215,6 @@
                 window.location.href = '${pageContext.request.contextPath}/user/page?page=' + Number(Number(firstPage) + 5);
             }
             console.log();
-            <%--var search = '${requestScope.pattern}';--%>
-            <%--if ('' === search) {--%>
-            <%----%>
-            <%--} else {--%>
-            <%--window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + Number(Number(firstPage) + 5);--%>
-            <%--}--%>
         } else {
             firstPage = index.innerText;
             if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
@@ -228,6 +225,33 @@
             }
         }
 
+    })
+
+    $(".table").find("input[type='checkbox]").click(function () {
+        if ($(this).prop("checked")) {
+            var uId = $(this).attr("data-id");
+            var id = ${sessionScope.userId};
+            if (uId === id) {
+                $(this).click();
+                layer.msg("不能關注自己");
+            } else {
+                $.post("/user/follow", {uId: uId}, function (data) {
+                    if ("success" === data) {
+                        layer.msg("關注成功");
+                    } else {
+                        layer.msg(data);
+                    }
+                });
+            } else {
+                var ufId = $(this).attr("data-ufId");
+                $.post("/user/unfollow", {ufId: ufId}, function(data) {
+                    if ("success" === data) {
+                        layer.msg("已取消關注");
+                    }
+                })
+            }
+
+        }
     })
 </script>
 </body>
