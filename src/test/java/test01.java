@@ -1,4 +1,9 @@
+import dfbz.com.service.UserDetailService;
 import org.junit.Test;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class test01 {
 
@@ -18,5 +23,14 @@ public class test01 {
         }
         System.out.println(chars);
         System.out.println(name.toString());
+    }
+
+    @Test
+    public void getUserDetail() {
+        UserDetailService detailService = new UserDetailService();
+        Integer userId = 1;
+        Map<String, Object> userDetail = detailService.getUserDetail(userId);
+        detailService.viewIncretment(userId);
+        System.out.println(userDetail);
     }
 }

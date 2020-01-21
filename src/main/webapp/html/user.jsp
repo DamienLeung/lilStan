@@ -25,40 +25,7 @@
 
 <div class="d-flex align-items-stretch">
     <!-- Sidebar Navigation-->
-    <nav id="sidebar">
-        <!-- Sidebar Header-->
-        <div class="sidebar-header d-flex align-items-center">
-            <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..."
-                                                 class="img-fluid rounded-circle"></div>
-            <div class="title">
-                <h1 class="h5">${sessionScope.userInfo.username}</h1>
-                <p>${sessionScope.userInfo.deptName}</p>
-            </div>
-        </div>
-        <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
-        <ul class="list-unstyled">
-            <li><a href="home.jsp"> <i class="icon-home"></i>主页 </a></li>
-            <li><a href="#userDropdown" data-toggle="collapse" aria-expanded="true"> <i
-                    class="icon-windows"></i>用户列表</a>
-                <ul id="userDropdown" class="collapse show">
-                    <li class="active"><a href="<c:url value="/user/page"/>">查看用户</a></li>
-                    <li><a href="my_user.html">我关注的用户</a></li>
-                    <li><a href="article.html">发布文章</a></li>
-                    <li><a href="article_collect.html">我的收藏</a></li>
-                </ul>
-            </li>
-            <!--<li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>-->
-
-            <li><a href="#depDropdown" data-toggle="collapse"> <i class="icon-windows2"></i>部门列表</a>
-                <ul id="depDropdown" class="collapse list-unstyled ">
-                    <li><a href="department.html">全部部门</a></li>
-                    <li><a href="meeting.html">会议系统</a></li>
-                </ul>
-            </li>
-
-        </ul>
-
-    </nav>
+    <%@ include file="sidebar.jsp" %>
     <!-- Sidebar Navigation end-->
     <div class="page-content">
         <div class="page-header">
@@ -111,13 +78,19 @@
                             <td>${user.age}</td>
                             <td>${user.desc}</td>
                             <td>
-                                <input type="submit" value="详细信息" class="btn btn-xs btn-primary userDetail">
+                                <input type="button" data-userid="${user.id}" value="详细信息"
+                                       class="btn btn-xs btn-primary userDetail">
                             </td>
 
                             <td>
-
-                                <input type="checkbox"  value="" class="checkbox-template">
-
+                                <c:if test="${user.ufId == null}">
+                                    <input type="checkbox" data-ufid="${user.ufId}" data-uid="${user.id}" value=""
+                                           class="checkbox-template">
+                                </c:if>
+                                <c:if test="${user.ufId != null}">
+                                    <input checked="checked" type="checkbox" data-ufid="${user.ufId}"
+                                           data-uid="${user.id}" value="" class="checkbox-template">
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>
@@ -138,7 +111,9 @@
                                 <li><a href="<c:url value="/user/page?page=${index}"/>">${index}</a></li>
                             </c:if>
                             <c:if test="${requestScope.pattern != null}">
-                                <li><a href="<c:url value="/user/searchUser?pattern=${requestScope.pattern}&&page=${index}"/>">${index}</a></li>
+                                <li>
+                                    <a href="<c:url value="/user/searchUser?pattern=${requestScope.pattern}&&page=${index}"/>">${index}</a>
+                                </li>
                             </c:if>
                         </c:forEach>
                         <li>
@@ -176,7 +151,83 @@
 
 
 <script>
+    $("#prePage").click(function () {
+        var index = $(this).parent().siblings()[0];
+        var firstPage = $(index.firstChild).html();
+        var search = '${requestScope.pattern}';
+        if ('' === search) {
+            if (Number(firstPage) < 6) {
+                layer.msg("頁碼已經到頂了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/page?page=' + (Number(firstPage) - 1);
+            }
+        } else {
+            firstPage = index.innerText;
+            if (Number(firstPage) < 6) {
+                layer.msg("頁碼已經到頂了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + (Number(firstPage) - 1);
+            }
+        }
+    });
+    $("#nextPage").click(function () {
+        var index = $(this).parent().siblings()[1];
+        var firstPage = $(index.firstChild).html();
+        var search = '${requestScope.pattern}';
+        if ('' === search) {
+            if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+                layer.msg("頁碼已經到底了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/page?page=' + Number(Number(firstPage) + 5);
+            }
+            console.log();
+        } else {
+            firstPage = index.innerText;
+            if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+                layer.msg("頁碼已經到底了");
+                return;
+            } else {
+                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + Number(Number(firstPage) + 5);
+            }
+        }
+    })
+    $(".table").find("input[type='checkbox']").on("click", function () {
+        if ($(this).prop("checked")) {
+            var uId = $(this).attr("data-uid");
+            var id = '${sessionScope.userId}';
+            if (uId === id) {
+                $(this).click();
+                layer.msg("不能關注自己");
+            } else {
+                $.post("/user/follow", {uId: uId}, function (data) {
+                    if ("success" === data) {
+                        layer.msg("關注成功");
+                    } else {
+                        layer.msg(data);
+                    }
+                })
+            }
+        } else {
+            var ufId = $(this).attr("data-ufId");
+            $.post("/user/unfollow", {ufId: ufId}, function (data) {
+                if ("success" === data) {
+                    layer.msg("已取消關注");
+                }
+            })
+        }
+    });
 
+    $(".userDetail").click(function () {
+        let uId = $(this).attr("data-userid");
+        if (uId !== null) {
+            window.location.href = '/user/getUserDetail?id=' + uId;
+        } else {
+            layer.msg("數據錯誤，請確認數據庫的數據");
+        }
+    })
 </script>
 </body>
 </html>
