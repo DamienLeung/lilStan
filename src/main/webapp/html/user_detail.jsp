@@ -91,11 +91,21 @@
                                 <div class="col-sm-9">
 
                                     <div class="i-checks">
-                                        <input disabled="disabled" id="radioCustom1" type="radio" value="1" name="sex" class="radio-template">
-                                        <label for="radioCustom1">男</label>
-                                        <span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span>
-                                        <input disabled="disabled" id="radioCustom2" type="radio" value="0" name="sex" class="radio-template">
-                                        <label for="radioCustom2">女</label>
+                                        <c:if test="${sessionScope.userDetail.gender == 0}">
+                                            <input disabled="disabled" id="radioCustom1" type="radio" value="1" name="sex" class="radio-template" checked>
+                                            <label for="radioCustom1">男</label>
+                                            <span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span>
+                                            <input disabled="disabled" id="radioCustom2" type="radio" value="0" name="sex" class="radio-template">
+                                            <label for="radioCustom2">女</label>
+                                        </c:if>
+                                        <c:if test="${sessionScope.userDetail.gender == 1}">
+                                            <input disabled="disabled" id="radioCustom1" type="radio" value="1" name="sex" class="radio-template">
+                                            <label for="radioCustom1">男</label>
+                                            <span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span>
+                                            <input disabled="disabled" id="radioCustom2" type="radio" value="0" name="sex" class="radio-template" checked>
+                                            <label for="radioCustom2">女</label>
+                                        </c:if>
+
                                     </div>
                                 </div>
 

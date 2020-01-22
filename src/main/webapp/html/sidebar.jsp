@@ -24,7 +24,7 @@
                 class="icon-windows"></i>用户列表</a>
             <ul id="userDropdown" class="collapse show">
                 <li class="active"><a href="<c:url value="/user/page"/>">查看用户</a></li>
-                <li><a href="my_user.html">我关注的用户</a></li>
+                <li><a href="my_user.jsp">我关注的用户</a></li>
                 <li><a href="article.html">发布文章</a></li>
                 <li><a href="article_collect.html">我的收藏</a></li>
             </ul>
