@@ -13,7 +13,7 @@ public class MyUserService {
     MyUserDao dao = new MyUserDao();
     public List<Map<String, Object>> getUsers(int page, Integer id) {
         if (id != null) {
-            return null;
+            return dao.getUsers(page, id);
         } else {
             return null;
         }

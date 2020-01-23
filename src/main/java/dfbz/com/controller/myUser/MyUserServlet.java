@@ -17,19 +17,18 @@ public class MyUserServlet extends BaseServlet {
 
     MyUserService service = new MyUserService();
 
-    public void searchUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
+    public void page(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         int page = 1;
         String pageString = req.getParameter("page");
         if (pageString != null)
             if (!pageString.equals(""))
                 page = Integer.parseInt(pageString);
-        String id = req.getParameter("userId");
         try {
             String userId = req.getSession().getAttribute("userId").toString();
             List<Map<String, Object>> maps = service.getUsers(page, Integer.parseInt(userId));
-            int pageSize = service.getListSize(Integer.parseInt(id)) % 5 == 0 ?
-                    service.getListSize(Integer.parseInt(id)) / 5 :
-                    service.getListSize(Integer.parseInt(id)) / 5 + 1;
+            int pageSize = service.getListSize(Integer.parseInt(userId)) % 5 == 0 ?
+                    service.getListSize(Integer.parseInt(userId)) / 5 :
+                    service.getListSize(Integer.parseInt(userId)) / 5 + 1;
             int startPage = (page - 1) / 5 * 5 + 1;
             req.setAttribute("startPage", startPage);
             if ((startPage + 4) < pageSize)
@@ -40,7 +39,7 @@ public class MyUserServlet extends BaseServlet {
             req.setAttribute("currentPage", page);
             req.getSession().setAttribute("userList", maps);
             req.setAttribute("maxPage", pageSize);
-            req.getRequestDispatcher(req.getContextPath() + "/html/user.jsp").forward(req, resp);
+            req.getRequestDispatcher(req.getContextPath() + "/html/my_user.jsp").forward(req, resp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,11 +47,13 @@ public class MyUserServlet extends BaseServlet {
     }
 
     public void unfollow(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String ufId = req.getParameter("ufId");
+        String ufId = req.getParameter("id");
         if (ufId != null) {
             service.unfollow(Integer.parseInt(ufId));
+            resp.getWriter().write("success");
+            resp.sendRedirect(req.getContextPath() + "/html/my_user.jsp");
         } else {
-            resp.getWriter().write("請輸入ufId");
+            resp.getWriter().write("有內鬼，終止交易");
         }
     }
 
