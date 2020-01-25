@@ -28,7 +28,6 @@ public class UserServlet extends BaseServlet {
         String userId = req.getSession().getAttribute("userId").toString();
         List<Map<String, Object>> users = service.getUsers(page, null, Integer.parseInt(userId));
         req.setAttribute("currentPage", page);
-//        int pageN = 2;
         int pageSize = service.getInfoListSize(null) % 5 == 0 ?
                 service.getInfoListSize(null) / 5 : service.getInfoListSize(null) / 5 + 1;
         int startPage = (page - 1) / 5 * 5 + 1;
@@ -40,7 +39,6 @@ public class UserServlet extends BaseServlet {
         req.setAttribute("currentPage", page);
         req.setAttribute("maxPage", pageSize);
         req.getSession().setAttribute("userList", users);
-//        resp.sendRedirect(req.getContextPath() + "/html/user.jsp");
         req.getRequestDispatcher(req.getContextPath() + "/html/user.jsp").forward(req, resp);
     }
 

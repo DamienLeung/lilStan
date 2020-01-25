@@ -1,6 +1,11 @@
+import dfbz.com.annotation.TableAnnotation;
+import dfbz.com.pojo.Department;
+import dfbz.com.pojo.User;
+import dfbz.com.pojo.UserInfo;
 import dfbz.com.service.UserDetailService;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.junit.Test;
 
@@ -56,5 +61,31 @@ public class test01 {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void getDetails() {
+        Integer id = 2;
+        StringBuilder sql = new StringBuilder();
+        sql.append("select u.username, u.is_secret as isSecret, u.email, d.name as deptName" +
+                ", ui.real_name as realName, ui.age, ui.phone, ui.gender, ui.register_time as regTime " +
+                ", ui.login_time as loginTime, ui.pic, ui.look, ");
+        sql.append("(select count(*) from user_focus where user_focus_id = ui.user_id) as fansCount ");
+        String tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("from ").append(tableName).append(" ui ");
+        tableName = User.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("left join ").append(tableName).append(" u ");
+        sql.append("on u.id = ui.user_id ");
+        tableName = Department.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("left join ").append(tableName).append(" d ");
+        sql.append("on d.id = u.dept_id ");
+        sql.append("where u.id = ?");
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            Map<String, Object> query = runner.query(sql.toString(), new MapHandler(), id);
+            System.out.println(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

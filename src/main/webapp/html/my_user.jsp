@@ -71,7 +71,7 @@
                 <ul>
                     <c:forEach items="${sessionScope.userList}" var="follower">
                         <li class="list-group-item" id="li${follower.id}">
-                            <a href="user_detail.jsp">${follower.realName}</a>
+                            <a href="<c:url value="/user/getUserDetail?id=${follower.id}"/>">${follower.realName}</a>
                             <div style="float: right" class="text-right">
                                 <input type="submit" data-id="${follower.id}" class="btn btn-danger unfollow"
                                        value="取消关注">
