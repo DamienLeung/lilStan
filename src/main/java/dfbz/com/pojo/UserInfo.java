@@ -149,6 +149,20 @@ public class UserInfo {
     public UserInfo() {
     }
 
+    public UserInfo(Integer userId, String realName, Integer age, String phone, String gender, String desc,
+                    Timestamp registerTime, Timestamp loginTime, String pic, Integer look) {
+        this.userId = userId;
+        this.realName = realName;
+        this.age = age;
+        this.phone = phone;
+        this.gender = gender;
+        this.desc = desc;
+        this.registerTime = registerTime;
+        this.loginTime = loginTime;
+        this.pic = pic;
+        this.look = look;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +

@@ -54,7 +54,6 @@ public class BaseDao<T> {
                 Method method = null;
                 method = t.getClass().getDeclaredMethod(methodN);
                 if (method.invoke(t) != null) {
-
                     query.append("`").append(MappingVarToColName.mappingName(col)).append("`=");
                     strings.add(method.invoke(t).toString());
                     query.append("?,");

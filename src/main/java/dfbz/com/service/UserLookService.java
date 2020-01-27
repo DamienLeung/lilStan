@@ -1,6 +1,8 @@
 package dfbz.com.service;
 
 import dfbz.com.dao.UserLookDao;
+import dfbz.com.pojo.User;
+import dfbz.com.pojo.UserInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ public class UserLookService {
         return dao.getUserDetail(id);
     }
 
-    public void updateDetail() {
-        dao.update();
+    public void updateDetail(User user, UserInfo info) {
+        dao.update(user, info);
     }
 }

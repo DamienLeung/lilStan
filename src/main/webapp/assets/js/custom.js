@@ -4,7 +4,7 @@ $(function () {
 
     $("#avatar").click(function () {
         console.log("你点击了头像");
-        window.location.href = '../../html/user_look.jsp'
+        window.location.href = '/userLook/showDetail'
     });
 
     //file表单选中文件时,让file表单的val展示到showname这个展示框
