@@ -45,7 +45,7 @@ $(function () {
         if ($(this).prop("checked")) {
             var uId = $(this).attr("data-uid");
             var aId = $("#userId").val;
-            if(uId === aId)
+            if (uId === aId)
                 layer.msg("不能關注自己");
             else {
                 $.post
@@ -80,5 +80,18 @@ $(function () {
 
 //触发隐藏的file表单
 function makeThisfile() {
-    $('#myFile').click();
+    $('#myFile').click(function () {
+        var formData = new FormData(this);
+        $.ajax({
+            url: "/userLook/upload",
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                layer.msg(data)
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+    })
 }

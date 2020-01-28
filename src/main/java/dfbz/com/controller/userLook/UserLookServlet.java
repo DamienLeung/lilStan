@@ -57,4 +57,16 @@ public class UserLookServlet extends BaseServlet {
 
 
     }
+
+    public void upload(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ServletInputStream input = req.getInputStream();
+        byte[] bytes = new byte[1024];
+        int length;
+        File file = new File("I:\\IdeaProjects\\JavaWeb\\img\\" + System.currentTimeMillis() + ".jpg");
+        BufferedOutputStream out = new BufferedOutputStream(
+                new FileOutputStream(file));
+        while ((length = input.read(bytes)) != -1) {
+            out.write(length);
+        }
+    }
 }
