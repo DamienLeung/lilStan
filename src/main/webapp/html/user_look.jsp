@@ -97,7 +97,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">真实姓名</label>
                                 <div class="col-sm-9">
-                                    <input type="text" value="东方标准" class="form-control" name="realName">
+                                    <input type="text" value="${sessionScope.userDetail.realName}" class="form-control" name="realName">
                                 </div>
                             </div>
                             <div class="line"></div>
@@ -107,43 +107,43 @@
                                     <select class="selectpicker" data-live-search="true" name="selector">
                                         <option>${sessionScope.userDetail.deptName}</option>
                                         <c:if test="${sessionScope.userDetail.deptName == \"研发部\"}">
-                                            <option value="2">推廣部</option>
+                                            <option value="2">推广部</option>
                                             <option value="3">行政部</option>
                                             <option value="4">财务部</option>
                                             <option value="5">总裁办公室</option>
-                                            <option value="7">祕書部</option>
+                                            <option value="7">秘书部</option>
                                         </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"推廣部\"}">
+                                        <c:if test="${sessionScope.userDetail.deptName == \"推广部\"}">
                                             <option value="1">研发部</option>
                                             <option value="3">行政部</option>
                                             <option value="4">财务部</option>
                                             <option value="5">总裁办公室</option>
-                                            <option value="7">祕書部</option>
+                                            <option value="7">秘书部</option>
                                         </c:if>
                                         <c:if test="${sessionScope.userDetail.deptName == \"行政部\"}">
                                             <option value="1">研发部</option>
-                                            <option value="2">推廣部</option>
+                                            <option value="2">推广部</option>
                                             <option value="4">财务部</option>
                                             <option value="5">总裁办公室</option>
-                                            <option value="7">祕書部</option>
+                                            <option value="7">秘书部</option>
                                         </c:if>
                                         <c:if test="${sessionScope.userDetail.deptName == \"财务部\"}">
                                             <option value="1">研发部</option>
-                                            <option value="2">推廣部</option>
+                                            <option value="2">推广部</option>
                                             <option value="3">行政部</option>
                                             <option value="5">总裁办公室</option>
-                                            <option value="7">祕書部</option>
+                                            <option value="7">秘书部</option>
                                         </c:if>
                                         <c:if test="${sessionScope.userDetail.deptName == \"总裁办公室\"}">
                                             <option value="1">研发部</option>
-                                            <option value="2">推廣部</option>
+                                            <option value="2">推广部</option>
                                             <option value="3">行政部</option>
                                             <option value="4">财务部</option>
-                                            <option value="7">祕書部</option>
+                                            <option value="7">秘书部</option>
                                         </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"祕書部\"}">
+                                        <c:if test="${sessionScope.userDetail.deptName == \"秘书处\"}">
                                             <option value="1">研发部</option>
-                                            <option value="2">推廣部</option>
+                                            <option value="2">推广部</option>
                                             <option value="3">行政部</option>
                                             <option value="4">财务部</option>
                                             <option value="5">总裁办公室</option>
@@ -276,14 +276,18 @@
         else
             isSecret = 0;
 
-
+        var gender;
+        if ($('#radioCustom1').prop('checked'))
+            gender = 0;
+        else
+            gender = 1;
 
         $.post("/userLook/update", {
             realName: $('[name="realName"]').val(),
             deptName: $('[name="selector"]').val(),
             age: $('[name="age"]').val(),
             phone: $('[name="phone"]').val(),
-            gender: $('[name="sex"]').val(),
+            gender: gender,
             isSecret: isSecret
         });
     });

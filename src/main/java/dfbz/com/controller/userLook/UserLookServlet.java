@@ -53,8 +53,7 @@ public class UserLookServlet extends BaseServlet {
                 null, null,
                 null, null, null);
 
-        //service.updateDetail(user, info);
-        System.out.println(info);
+        service.updateDetail(user, info);
 
 
     }
