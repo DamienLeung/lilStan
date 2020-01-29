@@ -34,7 +34,6 @@ public class MyUserServlet extends BaseServlet {
                 req.setAttribute("endPage", startPage + 4);
             else
                 req.setAttribute("endPage", pageSize);
-            System.out.println(maps.size());
             req.setAttribute("currentPage", page);
             req.getSession().setAttribute("userList", maps);
             req.setAttribute("maxPage", pageSize);

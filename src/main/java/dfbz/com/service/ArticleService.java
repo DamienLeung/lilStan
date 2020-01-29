@@ -8,7 +8,7 @@ import java.util.Map;
 public class ArticleService {
     private ArticleDao dao = new ArticleDao();
 
-    public List<Map<String, Object>> getArticles(Integer id) {
-        return dao.getArticles(id);
+    public List<Map<String, Object>> getArticles(int page, String pattern) {
+        return dao.getArticles(page, pattern);
     }
 }

@@ -14,18 +14,23 @@ import java.util.List;
 import java.util.Map;
 
 public class ArticleDao extends BaseDao<Article> {
-    public List<Map<String, Object>> getArticles(Integer id) {
+    public List<Map<String, Object>> getArticles(int page, String pattern) {
         StringBuilder sql = new StringBuilder();
         sql.append("select a.title, a.content, a.publish_date as publishDate, a.publish_username as author, " +
                 "a.user_id as userId, a.browse_count as browseCount ");
         String tableName = Article.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" a ");
-        sql.append("where a.user_id = ?");
-        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-        try {
-            return runner.query(sql.toString(), new MapListHandler(), id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (pattern != null) {
+            sql.append("where a.title like ?");
+            QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+            try {
+                return runner.query(sql.toString(), new MapListHandler(), "%" + pattern + "%");
+            } catch (SQLException e) { e.printStackTrace(); }
+        } else {
+            QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+            try {
+                return runner.query(sql.toString(), new MapListHandler());
+            } catch (SQLException e) { e.printStackTrace(); }
         }
         return null;
     }

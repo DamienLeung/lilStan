@@ -1,4 +1,5 @@
 import dfbz.com.annotation.TableAnnotation;
+import dfbz.com.dao.ArticleDao;
 import dfbz.com.pojo.Department;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
@@ -87,5 +88,13 @@ public class test01 {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getArticles() {
+        int page = 1;
+        ArticleDao dao = new ArticleDao();
+        List<Map<String, Object>> articles = dao.getArticles(page, "Spring");
+        System.out.println(articles);
     }
 }

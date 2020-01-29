@@ -69,10 +69,10 @@
             <div class="list-group myList">
                 <!--搜索文章的条件-->
                 <div class="myTitle">
-                    <form class="form-inline">
+                    <form class="form-inline" action="<c:url value="/myUser/searchArticle"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
-                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control">
+                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control" name="pattern">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="查询" class="btn btn-primary">
@@ -84,7 +84,7 @@
                 </div>
 
                 <ul>
-                    <c:forEach items="${sessionScope.articleDetail}" var="article">
+                    <c:forEach items="${sessionScope.articleList}" var="article">
                         <li class="list-group-item">
                             <div style="float: right;">
                                 <span><strong>收藏数：</strong>100</span>

@@ -46,12 +46,13 @@ public class MyUserDao extends BaseDao<UserFocus> {
     public int getListSize(Integer id) {
         StringBuilder sql = new StringBuilder();
         String tableName = UserFocus.class.getAnnotation(TableAnnotation.class).value();
-        sql.append("select * from ").append(tableName).append(" uf ");
-        sql.append("where uf.user_id = ?");
+        sql.append("select * from ").append(tableName).append(" ");
+        sql.append("where user_id = ?");
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
-            Map<String, Object> maps = runner.query(sql.toString(), new MapHandler(), id);
-            return maps.size();
+            Map<String, Object> query = runner.query(sql.toString(), new MapHandler(), id);
+            System.out.println(query);
+            return query.size();
         } catch (SQLException e) {
             e.printStackTrace();
         }
