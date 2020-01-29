@@ -69,7 +69,7 @@
             <div class="list-group myList">
                 <!--搜索文章的条件-->
                 <div class="myTitle">
-                    <form class="form-inline" action="<c:url value="/myUser/searchArticle"/>">
+                    <form class="form-inline" action="<c:url value="/article/searchArticle"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
                             <input id="inlineFormInput" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control" name="pattern">
@@ -108,11 +108,12 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        <c:forEach var="index" varStatus="status" begin="${requestScope.startPage}"
+                                   end="${requestScope.endPage}" step="1">
+                            <li>
+                                <a href="<c:url value="/article/showArticle?page=${index}"/>">${index}</a>
+                            </li>
+                        </c:forEach>
                         <li>
                             <a href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>

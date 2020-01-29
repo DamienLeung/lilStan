@@ -92,9 +92,9 @@ public class test01 {
 
     @Test
     public void getArticles() {
-        int page = 1;
+        int page = 2;
         ArticleDao dao = new ArticleDao();
-        List<Map<String, Object>> articles = dao.getArticles(page, "Spring");
+        List<Map<String, Object>> articles = dao.getArticles(page, null);
         System.out.println(articles);
     }
 }

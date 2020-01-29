@@ -21,15 +21,22 @@ public class ArticleDao extends BaseDao<Article> {
         String tableName = Article.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" a ");
         if (pattern != null) {
-            sql.append("where a.title like ?");
+            sql.append("where a.title like ? ");
+            sql.append("order by a.id ");
+            sql.append("limit ?, ?");
             QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
             try {
-                return runner.query(sql.toString(), new MapListHandler(), "%" + pattern + "%");
+                return runner.query(sql.toString(), new MapListHandler(),
+                        "%" + pattern + "%",
+                        (page - 1) * 5, 5);
             } catch (SQLException e) { e.printStackTrace(); }
         } else {
+            sql.append("order by a.id ");
+            sql.append("limit ?, ?");
             QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
             try {
-                return runner.query(sql.toString(), new MapListHandler());
+                return runner.query(sql.toString(), new MapListHandler(),
+                        (page - 1) * 5, 5);
             } catch (SQLException e) { e.printStackTrace(); }
         }
         return null;
