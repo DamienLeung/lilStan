@@ -25,7 +25,7 @@ $(function () {
 
     //添加文章跳转链接
     $("#addArt").click(function () {
-        window.location.href = '../../html/article_add.html'
+        window.location.href = '../../article/postArticle'
     });
 
 

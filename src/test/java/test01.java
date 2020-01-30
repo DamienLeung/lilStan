@@ -1,8 +1,10 @@
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.ArticleDao;
+import dfbz.com.pojo.Article;
 import dfbz.com.pojo.Department;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
+import dfbz.com.service.ArticleService;
 import dfbz.com.service.UserDetailService;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
@@ -13,6 +15,7 @@ import org.junit.Test;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -96,5 +99,19 @@ public class test01 {
         ArticleDao dao = new ArticleDao();
         List<Map<String, Object>> articles = dao.getArticles(page, null);
         System.out.println(articles);
+    }
+
+    @Test
+    public void getArticleId() {
+        ArticleService service = new ArticleService();
+        System.out.println(service.getId());
+    }
+
+    @Test
+    public void postArticle() {
+        Article article = new Article(16, "aaa", "aaa", 120,
+                new Timestamp(System.currentTimeMillis()), "admin", 1);
+        ArticleService service = new ArticleService();
+        service.post(article);
     }
 }

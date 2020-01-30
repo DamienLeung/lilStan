@@ -3,6 +3,7 @@ package dfbz.com.pojo;
 import dfbz.com.annotation.FieldAnnotation;
 import dfbz.com.annotation.TableAnnotation;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -39,7 +40,7 @@ public class Article {
      * Publish date
      */
     @FieldAnnotation("publish_date")
-    private Date publishDate;
+    private Timestamp publishDate;
 
     /**
      * Author
@@ -88,11 +89,11 @@ public class Article {
         this.browseCount = browseCount;
     }
 
-    public Date getPublishDate() {
+    public Timestamp getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(Timestamp publishDate) {
         this.publishDate = publishDate;
     }
 
@@ -109,6 +110,16 @@ public class Article {
     }
 
     public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Article(Integer id, String title, String content, Integer browseCount, Timestamp publishDate, String publishUsername, Integer userId) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.browseCount = browseCount;
+        this.publishDate = publishDate;
+        this.publishUsername = publishUsername;
         this.userId = userId;
     }
 }

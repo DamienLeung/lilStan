@@ -7,6 +7,7 @@ import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
 import java.sql.SQLException;
@@ -38,6 +39,60 @@ public class ArticleDao extends BaseDao<Article> {
                 return runner.query(sql.toString(), new MapListHandler(),
                         (page - 1) * 5, 5);
             } catch (SQLException e) { e.printStackTrace(); }
+        }
+        return null;
+    }
+
+    public int getArticleNum(String pattern) {
+        StringBuilder sql = new StringBuilder();
+        String tableName = Article.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("select * from ").append(tableName).append(" ");
+        if (pattern != null) {
+            sql.append("where title like ?");
+            QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+            try {
+                return runner.query(sql.toString(), new MapListHandler(), pattern).size();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+            try {
+                return runner.query(sql.toString(), new MapListHandler()).size();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public int getId() {
+        StringBuilder sql = new StringBuilder();
+        String tableName = Article.class.getAnnotation(TableAnnotation.class).value();
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        sql.append("select id from ").append(tableName);
+        try {
+            List<Map<String, Object>> query = runner.query(sql.toString(), new MapListHandler());
+            return Integer.parseInt(query.get(query.size() - 1).get("id").toString()) + 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public Map<String, Object> getName(Integer id) {
+        StringBuilder sql = new StringBuilder();
+        String tableName = User.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("select u.id, u.username, ui.real_name as realName from ").append(tableName).append(" u ");
+        tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("left join ").append(tableName).append(" ui ");
+        sql.append("on u.id = ui.user_id ");
+        sql.append("where u.id = ?");
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            return runner.query(sql.toString(), new MapHandler(), id);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }

@@ -14,7 +14,6 @@ public class UserService {
     private UserDao dao = new UserDao();
     private UserInfoDao infoDao = new UserInfoDao();
     private UserFocusDao userFocusDao = new UserFocusDao();
-    private UserDetailDao detailDao = new UserDetailDao();
 
     public Integer validateUser(User user) {
         return dao.validateUser(user);

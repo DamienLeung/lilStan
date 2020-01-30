@@ -69,10 +69,10 @@
             <div class="list-group myList">
                 <!--搜索文章的条件-->
                 <div class="myTitle">
-                    <form class="form-inline" action="<c:url value="/article/searchArticle"/>">
+                    <form class="form-inline" action="<c:url value="/article/showArticle"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
-                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control" name="pattern">
+                            <input id="inlineFormInput" type="text" value="${requestScope.pattern}" class="mr-sm-3 form-control" name="pattern">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="查询" class="btn btn-primary">
@@ -111,7 +111,7 @@
                         <c:forEach var="index" varStatus="status" begin="${requestScope.startPage}"
                                    end="${requestScope.endPage}" step="1">
                             <li>
-                                <a href="<c:url value="/article/showArticle?page=${index}"/>">${index}</a>
+                                <a href="<c:url value="/article/showArticle?page=${index}&&pattern=${sessionScope.pattern}"/>">${index}</a>
                             </li>
                         </c:forEach>
                         <li>
@@ -145,5 +145,33 @@
 <script src="../assets/js/front.js"></script>
 <script src="../assets/js/custom.js"></script>
 
+
+<script>
+    $("#Previous").click(function () {
+        var index = $(this).parent().siblings()[0];
+        var firstPage = $(index.firstChild).html();
+        var search = '${requestScope.pattern}';
+        if (Number(firstPage) < 6) {
+            layer.msg("頁碼已經到頂了");
+            return;
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/article/searchArticle?page=' + (Number(firstPage) - 1);
+        }
+
+    });
+
+    $("#Next").click(function () {
+        var index = $(this).parent().siblings()[1];
+        var firstPage = $(index.firstChild).html();
+        var search = '${requestScope.pattern}';
+
+        if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+            layer.msg("頁碼已經到底了");
+            return;
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/article/searchArticle?page=' + Number(Number(firstPage) + 5);
+        }
+    });
+</script>
 </body>
 </html>

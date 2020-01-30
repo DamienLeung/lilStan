@@ -4,12 +4,9 @@ import dfbz.com.dao.base.BaseDao;
 import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.KeyedHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 public class UserDetailDao extends BaseDao<UserInfo> {
