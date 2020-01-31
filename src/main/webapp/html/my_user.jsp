@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <link rel="stylesheet" href="../assets/css/layer.css">
     <title>我的用户列表</title>
 
 </head>
@@ -84,7 +86,7 @@
                 <nav class="text-center" aria-label="Page navigation">
                     <ul class="pagination">
                         <li>
-                            <a href="#" aria-label="Previous">
+                            <a href="#" aria-label="Previous" id="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -95,7 +97,7 @@
                             </li>
                         </c:forEach>
                         <li>
-                            <a href="#" aria-label="Next">
+                            <a href="#" aria-label="Next" id="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -120,6 +122,7 @@
 <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../assets/vendor/jquery.cookie/jquery.cookie.js"></script>
 <script src="../assets/vendor/chart.js/Chart.min.js"></script>
+<script src="../assets/js/layer.js"></script>
 <script src="../assets/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="../assets/js/charts-home.js"></script>
 <script src="../assets/js/front.js"></script>
@@ -128,12 +131,13 @@
 <script>
     $("#Previous").click(function () {
         var index = $(this).parent().siblings()[0];
-        var firstPage = $(index.firstChild).html();
-        var search = '${requestScope.pattern}';
+        var firstPage = $(index).text();
+        console.log(Number(firstPage));
         if (Number(firstPage) < 6) {
             layer.msg("頁碼已經到頂了");
             return;
         } else {
+            layer.msg("hello");
             window.location.href = '${pageContext.request.contextPath}/myUser/page?page=' + (Number(firstPage) - 1);
         }
 
@@ -141,13 +145,13 @@
 
     $("#Next").click(function () {
         var index = $(this).parent().siblings()[1];
-        var firstPage = $(index.firstChild).html();
-        var search = '${requestScope.pattern}';
-
+        var firstPage = $(index).text();
+        console.log(Number(firstPage));
         if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
             layer.msg("頁碼已經到底了");
             return;
         } else {
+            layer.msg("hello");
             window.location.href = '${pageContext.request.contextPath}/myUser/page?page=' + Number(Number(firstPage) + 5);
         }
         console.log();

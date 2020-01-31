@@ -51,7 +51,7 @@ public class ArticleDao extends BaseDao<Article> {
             sql.append("where title like ?");
             QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
             try {
-                return runner.query(sql.toString(), new MapListHandler(), pattern).size();
+                return runner.query(sql.toString(), new MapListHandler(), "%" + pattern + "%").size();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

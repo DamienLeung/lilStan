@@ -5,6 +5,7 @@ import dfbz.com.pojo.Department;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
 import dfbz.com.service.ArticleService;
+import dfbz.com.service.MyUserService;
 import dfbz.com.service.UserDetailService;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
@@ -114,4 +115,20 @@ public class test01 {
         ArticleService service = new ArticleService();
         service.post(article);
     }
+
+    @Test
+    public void getAuthorName() {
+        ArticleService service = new ArticleService();
+        String name = service.getName(1);
+        System.out.println(name);
+    }
+
+    @Test
+    public void getMyUserNum() {
+        MyUserService service = new MyUserService();
+        int listSize = service.getListSize(1);
+        System.out.println(listSize);
+    }
+
+
 }

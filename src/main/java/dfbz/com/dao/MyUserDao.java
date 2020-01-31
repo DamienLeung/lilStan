@@ -48,9 +48,10 @@ public class MyUserDao extends BaseDao<UserFocus> {
         String tableName = UserFocus.class.getAnnotation(TableAnnotation.class).value();
         sql.append("select * from ").append(tableName).append(" ");
         sql.append("where user_id = ?");
+        System.out.println(sql.toString());
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
-            Map<String, Object> query = runner.query(sql.toString(), new MapHandler(), id);
+            List<Map<String, Object>> query = runner.query(sql.toString(), new MapListHandler(), id);
             System.out.println(query);
             return query.size();
         } catch (SQLException e) {
