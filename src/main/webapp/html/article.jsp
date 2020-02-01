@@ -96,7 +96,7 @@
                                 <span>&nbsp;</span>
                                 <span><strong>浏览数：</strong>${article.browseCount}</span>
                             </div>
-                            <a href="article_detail.html">${article.title}</a>
+                            <a href="<c:url value="/article/getArticleDetail?articleId=${article.id}"/>">${article.title}</a>
                             <p class="h6"><strong>作者：</strong>${article.author}</p>
                             <p class="h6"><strong>时间：</strong>${article.publishDate}</p>
                             <p style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis">${article.content}</p>

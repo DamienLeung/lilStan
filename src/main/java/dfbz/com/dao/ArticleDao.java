@@ -18,7 +18,7 @@ public class ArticleDao extends BaseDao<Article> {
     public List<Map<String, Object>> getArticles(int page, String pattern) {
         StringBuilder sql = new StringBuilder();
         sql.append("select a.title, a.content, a.publish_date as publishDate, a.publish_username as author, " +
-                "a.user_id as userId, a.browse_count as browseCount ");
+                "a.user_id as userId, a.browse_count as browseCount, a.id ");
         String tableName = Article.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" a ");
         if (pattern != null) {

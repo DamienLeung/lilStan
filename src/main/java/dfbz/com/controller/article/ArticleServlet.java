@@ -2,6 +2,7 @@ package dfbz.com.controller.article;
 
 import dfbz.com.controller.BaseServlet;
 import dfbz.com.pojo.Article;
+import dfbz.com.service.ArticleDetailService;
 import dfbz.com.service.ArticleService;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class ArticleServlet extends BaseServlet {
 
     private ArticleService service = new ArticleService();
+    private ArticleDetailService detailService = new ArticleDetailService();
 
 //    public void showArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 //        String pageStr = req.getParameter("page");
@@ -109,4 +111,17 @@ public class ArticleServlet extends BaseServlet {
             //resp.sendRedirect(req.getContextPath() + "/html/article_add.jsp");
         }
     }
+
+    public void getArticleDetail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String userId = req.getSession().getAttribute("userId").toString();
+        String articleId = req.getParameter("articleId");
+        Map<String, Object> articleDetails = detailService.getArticleDetails(Integer.parseInt(articleId));
+        req.getSession().setAttribute("articleDetails", articleDetails);
+        List<Map<String, Object>> username =
+                detailService.getUsersFollowedFavedArticle(Integer.parseInt(articleId), Integer.parseInt(userId));
+        req.getSession().setAttribute("usernames", username);
+        resp.sendRedirect(req.getContextPath() + "/html/article_detail.jsp");
+    }
+
+
 }

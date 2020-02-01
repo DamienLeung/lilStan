@@ -1,5 +1,6 @@
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.ArticleDao;
+import dfbz.com.dao.ArticleDetailDao;
 import dfbz.com.pojo.Article;
 import dfbz.com.pojo.Department;
 import dfbz.com.pojo.User;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -130,5 +132,30 @@ public class test01 {
         System.out.println(listSize);
     }
 
+    @Test
+    public void getUsersFavedArticle() {
+        ArticleDetailDao dao = new ArticleDetailDao();
+        List<Map<String, Object>> userIdFollowed = dao.getUserIdFollowed(1);
+        List<Map<String, Object>> userIdFavedArticle = dao.getFavDetail(1);
+        List<Map<String, Object>> usernames = new ArrayList<>();
+        for (int i = 0; i < userIdFavedArticle.size(); i++) {
+            for (int i1 = 0; i1 < userIdFollowed.size(); i1++) {
+                if (userIdFavedArticle.get(i).get("uId") == (userIdFollowed.get(i1).get("id"))) {
+                    if (userIdFollowed.get(i1).get("realName") != null)
+                        usernames.add(userIdFollowed.get(i1));
+                    else
+                        usernames.add(userIdFollowed.get(i1));
+                }
+            }
+        }
+        System.out.println(usernames);
+    }
 
+    @Test
+    public void getArticleDetail() {
+        ArticleDetailDao dao = new ArticleDetailDao();
+        Map<String, Object> map = dao.getArticleDtails(1);
+        map.put("FavCount", dao.getFavDetail(1).size());
+        System.out.println(map);
+    }
 }
