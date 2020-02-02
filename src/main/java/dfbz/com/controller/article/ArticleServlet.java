@@ -2,6 +2,7 @@ package dfbz.com.controller.article;
 
 import dfbz.com.controller.BaseServlet;
 import dfbz.com.pojo.Article;
+import dfbz.com.pojo.Favorite;
 import dfbz.com.service.ArticleDetailService;
 import dfbz.com.service.ArticleService;
 
@@ -59,10 +60,6 @@ public class ArticleServlet extends BaseServlet {
                 req.getSession().setAttribute("pattern", pattern);
                 req.getSession().setAttribute("maxPage", pageSize);
                 req.getSession().setAttribute("articleList", articles);
-                System.out.println("pattern" + pattern);
-                System.out.println("listSize" + listSize);
-                System.out.println("pageSize" + pageSize);
-                System.out.println("startPage" + startPage);
             } else {
                 List<Map<String, Object>> articles = service.getArticles(page, null);
                 int listSize = service.getListSize(null);
@@ -76,9 +73,6 @@ public class ArticleServlet extends BaseServlet {
                 else
                     req.getSession().setAttribute("endPage", pageSize);
                 req.getSession().setAttribute("articleList", articles);
-                System.out.println("listSize: " + listSize);
-                System.out.println("pageSize: " + pageSize);
-                System.out.println("startPage" + startPage);
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -94,16 +88,13 @@ public class ArticleServlet extends BaseServlet {
         String id = req.getSession().getAttribute("userId").toString();
         String title = req.getParameter("title");
         String content = req.getParameter("content");
-        System.out.println("id: " + id);
         if (id != null && title != null && content != null) {
             String name = service.getName(Integer.parseInt(id));
-            System.out.println("name: " + name);
             if (name != null) {
                 int articleId = service.getId();
                 resp.getWriter().write("success");
                 Article article = new Article(articleId, title, content, 0,
                         new Timestamp(System.currentTimeMillis()), name, Integer.parseInt(id));
-                System.out.println("article: " + articleId);
                 service.post(article);
             } else {
                 resp.getWriter().write("Post failed");
@@ -120,8 +111,37 @@ public class ArticleServlet extends BaseServlet {
         List<Map<String, Object>> username =
                 detailService.getUsersFollowedFavedArticle(Integer.parseInt(articleId), Integer.parseInt(userId));
         req.getSession().setAttribute("usernames", username);
+        System.out.println("user id: " + userId);
+        System.out.println("article id: " + articleId);
+        if (!userId.equals("") || !articleId.equals("")) {
+            Integer favId = detailService.getFavId(Integer.parseInt(userId), Integer.parseInt(articleId));
+            System.out.println("fav id: " + favId);
+            if (favId != null) {
+                req.getSession().setAttribute("buttonVal", "取消收藏");
+                req.getSession().setAttribute("fId", favId);
+            } else
+                req.getSession().setAttribute("buttonVal", "收藏");
+        }
         resp.sendRedirect(req.getContextPath() + "/html/article_detail.jsp");
     }
 
+    public void unfav(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String favoriteId = req.getParameter("fId");
+        if (favoriteId != null) {
+            detailService.removeFav(Integer.parseInt(favoriteId));
+            resp.getWriter().write("success");
+        }
+    }
 
+    public void fav(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String userId = req.getSession().getAttribute("userId").toString();
+        String articleId = req.getParameter("articleId");
+        if (articleId != null) {
+            int favId = detailService.getFavId();
+            Favorite f = new Favorite(favId, Integer.parseInt(userId), Integer.parseInt(articleId));
+            req.getSession().setAttribute("fId", favId);
+            detailService.saveFav(f);
+            resp.getWriter().write("success");
+        }
+    }
 }

@@ -5,6 +5,7 @@ import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.base.BaseDao;
 import dfbz.com.pojo.*;
 import dfbz.com.util.JDBCUtil;
+import javafx.scene.control.Tab;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
@@ -59,10 +60,7 @@ public class ArticleDetailDao extends BaseDao<Article> {
         if (articleId != null) {
             StringBuilder sql = new StringBuilder();
             String tableName = Favorite.class.getAnnotation(TableAnnotation.class).value();
-            sql.append("select f.u_id as uId from ").append(tableName).append(" f ");
-            tableName = Article.class.getAnnotation(TableAnnotation.class).value();
-            sql.append("left join ").append(tableName).append(" a ");
-            sql.append("on a.id = f.a_id ");
+            sql.append("select f.u_id as uId, f.id from ").append(tableName).append(" f ");
             sql.append("where f.a_id = ?");
             QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
             try {
@@ -74,5 +72,36 @@ public class ArticleDetailDao extends BaseDao<Article> {
         return null;
     }
 
+    public Integer getFavId(Integer userId, Integer articleId) {
+        StringBuilder sql = new StringBuilder();
+        String tableName = Favorite.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("select f.id from ").append(tableName).append(" f ");
+        sql.append("where f.a_id = ? and f.u_id = ?");
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            Map<String, Object> query = runner.query(sql.toString(), new MapHandler(), articleId, userId);
+            if (query != null) {
+                String id = query.get("id").toString();
+                return Integer.parseInt(id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Integer getFavId() {
+        StringBuilder sql = new StringBuilder();
+        String tableName = Favorite.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("select id from ").append(tableName).append(" order by id");
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            List<Map<String, Object>> query = runner.query(sql.toString(), new MapListHandler());
+            return Integer.parseInt(query.get(query.size() - 1).get("id").toString());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

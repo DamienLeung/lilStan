@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../assets/css/layer.css">
     <title>文章详情</title>
     <style>
-        .myList li{
+        .myList li {
             display: inline-block;
         }
     </style>
@@ -44,7 +44,7 @@
 
             <div class="myTitle">
                 <h3 class="text-center">${sessionScope.articleDetails.title}</h3>
-                <input type="submit" value="取消收藏" class="btn btn-info">
+                <input type="button" value="${sessionScope.buttonVal}" class="btn btn-info" id="subscribe">
 
             </div>
 
@@ -53,7 +53,8 @@
                 <p class="h6"><strong>创建时间：</strong>${sessionScope.articleDetails.publishDate}</p>
                 <p class="h6"><strong>浏览次数：</strong>${sessionScope.articleDetails.view}</p>
                 <p class="h6"><strong>收藏次数：</strong>${sessionScope.articleDetails.FavCount}</p>
-                <textarea style="padding: 2px" disabled="disabled" class="form-control" rows="11">${sessionScope.articleDetails.content}</textarea>
+                <textarea style="padding: 2px" disabled="disabled" class="form-control"
+                          rows="11">${sessionScope.articleDetails.content}</textarea>
 
             </div>
 
@@ -72,7 +73,7 @@
         <footer class="footer">
             <div class="footer__block block no-margin-bottom">
                 <div class="container-fluid text-center">
-                    <p class="no-margin-bottom">Copyright &copy; 2019.Company <a href="#" >东方标准</a> </p>
+                    <p class="no-margin-bottom">Copyright &copy; 2019.Company <a href="#">东方标准</a></p>
                 </div>
             </div>
         </footer>
@@ -81,9 +82,9 @@
 
 <!-- JavaScript files-->
 <script src="../assets/vendor/jquery/jquery.min.js"></script>
-<script src="../assets/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="../assets/vendor/popper.js/umd/popper.min.js"></script>
 <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="../assets/vendor/jquery.cookie/jquery.cookie.js"> </script>
+<script src="../assets/vendor/jquery.cookie/jquery.cookie.js"></script>
 <script src="../assets/vendor/chart.js/Chart.min.js"></script>
 <script src="../assets/vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="../assets/js/charts-home.js"></script>
@@ -91,5 +92,30 @@
 <script src="../assets/js/layer.js"></script>
 <script src="../assets/js/custom.js"></script>
 
+<script>
+    $("#subscribe").click(function () {
+        if ($(this).val() === "取消收藏") {
+            $.post("/article/unfav",
+                {fId: ${sessionScope.fId}},
+                function (data) {
+                    if (data === "success") {
+                        $(this).val("收藏");
+                        layer.msg("已取消收藏");
+                    } else
+                        layer.msg(data);
+                });
+        } else {
+            $.post("/article/fav/",
+                {articleId: ${sessionScope.articleDetails.id}},
+                function (data) {
+                    if (data === "success") {
+                        $(this).val("取消收藏");
+                        layer.msg("成功收藏");
+                    } else
+                        layer.msg(data);
+                });
+        }
+    })
+</script>
 </body>
 </html>

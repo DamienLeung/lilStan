@@ -34,4 +34,5 @@ public class ArticleService {
     public void post(Article article) {
         dao.add(article);
     }
+
 }

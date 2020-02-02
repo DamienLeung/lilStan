@@ -5,6 +5,7 @@ import dfbz.com.pojo.Article;
 import dfbz.com.pojo.Department;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
+import dfbz.com.service.ArticleDetailService;
 import dfbz.com.service.ArticleService;
 import dfbz.com.service.MyUserService;
 import dfbz.com.service.UserDetailService;
@@ -158,4 +159,13 @@ public class test01 {
         map.put("FavCount", dao.getFavDetail(1).size());
         System.out.println(map);
     }
+
+    @Test
+    public void getFavId() {
+        ArticleDetailService service = new ArticleDetailService();
+        int favId = service.getFavId();
+        System.out.println(favId);
+    }
+
+
 }
