@@ -1,4 +1,5 @@
 import dfbz.com.annotation.TableAnnotation;
+import dfbz.com.dao.ArticleColDao;
 import dfbz.com.dao.ArticleDao;
 import dfbz.com.dao.ArticleDetailDao;
 import dfbz.com.pojo.Article;
@@ -167,5 +168,11 @@ public class test01 {
         System.out.println(favId);
     }
 
+    @Test
+    public void getFavedArticles() {
+        ArticleColDao dao = new ArticleColDao();
+        List<Map<String, Object>> favedArticles = dao.getFavedArticles(1);
+        System.out.println(favedArticles);
+    }
 
 }
