@@ -171,8 +171,15 @@ public class test01 {
     @Test
     public void getFavedArticles() {
         ArticleColDao dao = new ArticleColDao();
-        List<Map<String, Object>> favedArticles = dao.getFavedArticles(1);
+        List<Map<String, Object>> favedArticles = dao.getFavedArticles(1, null, 1);
         System.out.println(favedArticles);
+    }
+
+    @Test
+    public void getFavArticleListSize() {
+        ArticleColDao dao = new ArticleColDao();
+        int listSize = dao.getListSize(1, null);
+        System.out.println(listSize);
     }
 
 }

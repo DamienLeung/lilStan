@@ -44,7 +44,7 @@
                     <li><a href="<c:url value="/user/page"/>">查看用户</a></li>
                     <li><a href="<c:url value="/myUser/page"/>">我关注的用户</a></li>
                     <li class="active"><a href="<c:url value="/article/showArticle"/>">发布文章</a></li>
-                    <li><a href="article_collect.jsp">我的收藏</a></li>
+                    <li><a href="<c:url value="/articleCol/showFavedArticles"/>">我的收藏</a></li>
                 </ul>
             </li>
             <!--<li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>-->
@@ -75,7 +75,7 @@
                     <form class="form-inline" action="<c:url value="/article/showArticle"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
-                            <input id="inlineFormInput" type="text" value="${sessionScope.pattern}" class="mr-sm-3 form-control" name="pattern">
+                            <input id="inlineFormInput" type="text" value="${sessionScope.pattern}" placeholder="按标题名字查找" class="mr-sm-3 form-control" name="pattern">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="查询" class="btn btn-primary">
@@ -152,12 +152,10 @@
 
 <script>
     $("#Previous").click(function () {
-        var index = $(this).parent().siblings()[0];
-        var firstPage = $(index.firstChild).html();
+        var firstPage = "${sessionScope.startPage}";
         var pattern = '${sessionScope.pattern}';
         if (Number(firstPage) < 6) {
             layer.msg("頁碼已經到頂了");
-            return;
         } else {
             window.location.href = '${pageContext.request.contextPath}/article/searchArticle?page=' + (Number(firstPage) - 1) + '&&pattern=' + pattern;
         }
@@ -165,13 +163,11 @@
     });
 
     $("#Next").click(function () {
-        var index = $(this).parent().siblings()[1];
-        var firstPage = $(index.firstChild).html();
+        var firstPage = '${sessionScope.startPage}';
         var pattern = '${sessionScope.pattern}';
 
         if (Number(firstPage) + 5 > ${sessionScope.maxPage}) {
             layer.msg("頁碼已經到底了");
-            return;
         } else {
             window.location.href = '${pageContext.request.contextPath}/article/searchArticle?page=' + Number(Number(firstPage) + 5) + '&&pattern=' + pattern;
         }

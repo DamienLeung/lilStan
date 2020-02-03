@@ -97,9 +97,10 @@
         if ($(this).val() === "取消收藏") {
             console.log($(this).val());
             $.post("/article/unfav/",
-                {fId: ${sessionScope.fId}},
+                {fId: '${sessionScope.fId}'},
                 function (data) {
                     if (data === "success") {
+
                         layer.msg("已取消收藏");
                     } else
                         layer.msg(data);
@@ -108,7 +109,7 @@
         } else {
             console.log($(this).val());
             $.post("/article/fav/",
-                {articleId: ${sessionScope.articleDetails.id}},
+                {articleId: '${sessionScope.articleDetails.id}'},
                 function (data) {
                     if (data === "success") {
                         layer.msg("成功收藏");

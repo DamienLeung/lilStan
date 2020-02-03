@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <link rel="stylesheet" href="../assets/css/layer.css">
     <title>我的收藏</title>
 
 </head>
@@ -69,10 +71,10 @@
             <div class="list-group myFavList">
                 <!--搜索文章的条件-->
                 <div class="myTitle">
-                    <form class="form-inline">
+                    <form class="form-inline" action="<c:url value="/articleCol/showFavedArticles"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
-                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control">
+                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" value="${sessionScope.pattern}" class="mr-sm-3 form-control" name="pattern">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="查询" class="btn btn-primary">
@@ -99,52 +101,23 @@
                             <p style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis">${article.content}</p>
                         </li>
                     </c:forEach>
-
-
-                    <li class="list-group-item">
-                        <div style="float: right;">
-                            <span><strong>收藏数：</strong>100</span>
-                            <span>&nbsp;</span>
-                            <span>&nbsp;</span>
-                            <span>&nbsp;</span>
-                            <span><strong>浏览数：</strong>13052021</span>
-                        </div>
-                        <a href="article_detail.jsp">如何做一名合格的Java工程师？</a>
-                        <p class="h6"><strong>作者：</strong>小标</p>
-                        <p class="h6"><strong>时间：</strong>2019-10-30 09:52:12</p>
-                        <p style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis">做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名工程师</p>
-                    </li>
-
-                    <li class="list-group-item">
-                        <div style="float: right;">
-                            <span><strong>收藏数：</strong>100</span>
-                            <span>&nbsp;</span>
-                            <span>&nbsp;</span>
-                            <span>&nbsp;</span>
-                            <span><strong>浏览数：</strong>13052021</span>
-                        </div>
-                        <a href="article_detail.jsp">如何做一名合格的Java工程师？</a>
-                        <p class="h6"><strong>作者：</strong>小标</p>
-                        <p class="h6"><strong>时间：</strong>2019-10-30 09:52:12</p>
-                        <p style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis">做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力，做一名Java工程师需要付出非常大的努力 做一名工程师</p>
-                    </li>
-
                 </ul>
 
                 <nav class="text-center" aria-label="Page navigation">
                     <ul class="pagination">
                         <li>
-                            <a href="#" aria-label="Previous">
+                            <a href="#" aria-label="Previous" id="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        <c:forEach var="index" varStatus="status" begin="${sessionScope.startPage}"
+                                   end="${sessionScope.endPage}" step="1">
+                            <li>
+                                <a href="<c:url value="/articleCol/showFavedArticles?page=${index}&&pattern=${sessionScope.pattern}"/>">${index}</a>
+                            </li>
+                        </c:forEach>
                         <li>
-                            <a href="#" aria-label="Next">
+                            <a href="#" aria-label="Next" id="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -173,5 +146,41 @@
 <script src="../assets/js/charts-home.js"></script>
 <script src="../assets/js/front.js"></script>
 <script src="../assets/js/custom.js"></script>
+<script src="../assets/js/layer.js"></script>
+<script>
+    $(".unfollow").on("click", function () {
+        var ufId = $(this).attr("data-id");
+        $.post("/myUser/unfollow", {id: ufId}, function (data) {
+            if ("success" === data) {
+                var className = ".li" + ufId;
+                $(className).remove();
+                layer.msg("已取消關注");
+            } else {
+                layer.msg(data);
+            }
+        })
+    });
+    $("#Previous").click(function () {
+        var firstPage = '${sessionScope.startPage}';
+        var pattern = '${sessionScope.pattern}';
+        if (Number(firstPage) < 6) {
+            layer.msg("頁碼已經到頂了");
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/articleCol/showFavedArticles?page=' + (Number(firstPage) - 1) + '&&pattern=' + pattern;
+        }
+
+    });
+
+    $("#Next").click(function () {
+        var firstPage = '${sessionScope.startPage}';
+        var pattern = '${sessionScope.pattern}';
+
+        if (Number(firstPage) + 5 > ${sessionScope.maxPage}) {
+            layer.msg("頁碼已經到底了");
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/articleCol/showFavedArticles?page=' + Number(Number(firstPage) + 5) + '&&pattern=' + pattern;
+        }
+    });
+</script>
 </body>
 </html>

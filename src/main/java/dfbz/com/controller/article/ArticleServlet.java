@@ -35,6 +35,7 @@ public class ArticleServlet extends BaseServlet {
 
     public void showArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pageStr = req.getParameter("page");
+        req.getSession().setAttribute("pattern", "");
         String pattern = null;
         try {
             int page = 1;
@@ -119,13 +120,16 @@ public class ArticleServlet extends BaseServlet {
             if (favId != null) {
                 req.getSession().setAttribute("buttonVal", "取消收藏");
                 req.getSession().setAttribute("fId", favId);
-            } else
+            } else {
+                favId = detailService.getFavId();
                 req.getSession().setAttribute("buttonVal", "收藏");
+                req.getSession().setAttribute("fId", favId);
+            }
         }
         resp.sendRedirect(req.getContextPath() + "/html/article_detail.jsp");
     }
 
-    public void unfav(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void unfav(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String favoriteId = req.getParameter("fId");
         if (favoriteId != null) {
             detailService.removeFav(Integer.parseInt(favoriteId));
@@ -133,13 +137,13 @@ public class ArticleServlet extends BaseServlet {
         }
     }
 
-    public void fav(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void fav(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String userId = req.getSession().getAttribute("userId").toString();
         String articleId = req.getParameter("articleId");
         if (articleId != null) {
             int favId = detailService.getFavId();
             Favorite f = new Favorite(favId, Integer.parseInt(userId), Integer.parseInt(articleId));
-            req.getSession().setAttribute("fId", favId);
+            System.out.println();
             detailService.saveFav(f);
             resp.getWriter().write("success");
         }
