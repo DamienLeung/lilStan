@@ -17,7 +17,7 @@ import java.util.Map;
 public class MyUserDao extends BaseDao<UserFocus> {
     public List<Map<String, Object>>getUsers(int page, Integer id) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select u.username, ui.real_name as realName, uf.id ");
+        sql.append("select u.username, ui.real_name as realName, uf.id, u.id as uId ");
         String tableName = User.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" u ");
         tableName = UserInfo.class.getAnnotation(TableAnnotation.class).value();
