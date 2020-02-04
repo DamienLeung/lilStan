@@ -51,7 +51,7 @@
 
             <li><a href="#depDropdown"  data-toggle="collapse"> <i class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse list-unstyled ">
-                    <li><a href="department.html">全部部门</a></li>
+                    <li><a href="<c:url value="/department/showMembers"/>">全部部门</a></li>
                     <li><a href="meeting.html">会议系统</a></li>
                 </ul>
             </li>
@@ -90,7 +90,7 @@
                     <c:forEach items="${sessionScope.articleList}" var="article">
                         <li class="list-group-item">
                             <div style="float: right;">
-                                <span><strong>收藏数：</strong>100</span>
+                                <span><strong>收藏数：</strong>${article.favCount}</span>
                                 <span>&nbsp;</span>
                                 <span>&nbsp;</span>
                                 <span>&nbsp;</span>

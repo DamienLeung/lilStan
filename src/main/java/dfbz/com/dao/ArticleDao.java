@@ -3,6 +3,7 @@ package dfbz.com.dao;
 import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.base.BaseDao;
 import dfbz.com.pojo.Article;
+import dfbz.com.pojo.Favorite;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
 import dfbz.com.util.JDBCUtil;
@@ -18,8 +19,10 @@ public class ArticleDao extends BaseDao<Article> {
     public List<Map<String, Object>> getArticles(int page, String pattern) {
         StringBuilder sql = new StringBuilder();
         sql.append("select a.title, a.content, a.publish_date as publishDate, a.publish_username as author, " +
-                "a.user_id as userId, a.browse_count as browseCount, a.id ");
-        String tableName = Article.class.getAnnotation(TableAnnotation.class).value();
+                "a.user_id as userId, a.browse_count as browseCount, a.id, ");
+        String tableName = Favorite.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("(select count(*) from ").append(tableName).append(" where a_id = a.id) as favCount ");
+        tableName = Article.class.getAnnotation(TableAnnotation.class).value();
         sql.append("from ").append(tableName).append(" a ");
         if (pattern != null) {
             sql.append("where a.title like ? ");

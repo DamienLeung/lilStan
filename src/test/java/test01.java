@@ -6,10 +6,7 @@ import dfbz.com.pojo.Article;
 import dfbz.com.pojo.Department;
 import dfbz.com.pojo.User;
 import dfbz.com.pojo.UserInfo;
-import dfbz.com.service.ArticleDetailService;
-import dfbz.com.service.ArticleService;
-import dfbz.com.service.MyUserService;
-import dfbz.com.service.UserDetailService;
+import dfbz.com.service.*;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
@@ -180,6 +177,20 @@ public class test01 {
         ArticleColDao dao = new ArticleColDao();
         int listSize = dao.getListSize(1, null);
         System.out.println(listSize);
+    }
+
+    @Test
+    public void getDepartment() {
+        DepartmentService service = new DepartmentService();
+        List<Map<String, Object>> deparments = service.getDeparments();
+        System.out.println(deparments);
+    }
+
+    @Test
+    public void getMembers() {
+        DepartmentService service = new DepartmentService();
+        List<Map<String, Object>> members = service.getMembers(5);
+        System.out.println(members);
     }
 
 }
