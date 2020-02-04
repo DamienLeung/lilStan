@@ -54,7 +54,7 @@
             <li><a href="#depDropdown" data-toggle="collapse" aria-expanded="true"> <i class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse show ">
                     <li class="active"><a href="<c:url value="/department/showMembers"/>">全部部门</a></li>
-                    <li><a href="meeting.html">会议系统</a></li>
+                    <li><a href="<c:url value="/meeting/showMeeting"/>">会议系统</a></li>
                 </ul>
             </li>
 
@@ -87,10 +87,10 @@
                 <ul>
                     <%
                         DepartmentService service = new DepartmentService();
-                        List<Map<String, Object>> deparments = service.getDeparments();
+                        List<Map<String, Object>> departments = service.getDepartments();
                         String userId = request.getSession().getAttribute("userId").toString();
                         for (Map<String, Object>department:
-                             deparments) {
+                             departments) {
                     %>
                         <li class="list-group-item">
                             <a href="#"><%=department.get("name")%></a>

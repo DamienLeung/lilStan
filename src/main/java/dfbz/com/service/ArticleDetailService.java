@@ -2,6 +2,7 @@ package dfbz.com.service;
 
 import dfbz.com.dao.ArticleDetailDao;
 import dfbz.com.dao.base.BaseDao;
+import dfbz.com.pojo.Article;
 import dfbz.com.pojo.Favorite;
 
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public class ArticleDetailService {
 
     public Map<String, Object> getArticleDetails(Integer articleId) {
         Map<String, Object> map = dao.getArticleDtails(articleId);
+        Article article = dao.rowQuery("id", articleId, Article.class);
+        article.setBrowseCount(article.getBrowseCount() + 1);
+        dao.save(article);
         map.put("FavCount", getFavCount(articleId));
         return map;
     }

@@ -49,7 +49,6 @@ public class MyUserServlet extends BaseServlet {
         if (ufId != null) {
             service.unfollow(Integer.parseInt(ufId));
             resp.getWriter().write("success");
-            resp.sendRedirect(req.getContextPath() + "/html/my_user.jsp");
         } else {
             resp.getWriter().write("有內鬼，終止交易");
         }

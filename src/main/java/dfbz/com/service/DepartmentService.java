@@ -8,7 +8,7 @@ import java.util.Map;
 public class DepartmentService {
     private DepartmentDao dao = new DepartmentDao();
 
-    public List<Map<String, Object>> getDeparments() {
+    public List<Map<String, Object>> getDepartments() {
         return dao.getDepartments();
     }
 

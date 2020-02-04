@@ -2,13 +2,14 @@ import dfbz.com.annotation.TableAnnotation;
 import dfbz.com.dao.ArticleColDao;
 import dfbz.com.dao.ArticleDao;
 import dfbz.com.dao.ArticleDetailDao;
-import dfbz.com.pojo.Article;
-import dfbz.com.pojo.Department;
-import dfbz.com.pojo.User;
-import dfbz.com.pojo.UserInfo;
+import dfbz.com.pojo.*;
 import dfbz.com.service.*;
 import dfbz.com.util.JDBCUtil;
+import org.apache.commons.dbutils.BasicRowProcessor;
+import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.junit.Test;
@@ -182,8 +183,8 @@ public class test01 {
     @Test
     public void getDepartment() {
         DepartmentService service = new DepartmentService();
-        List<Map<String, Object>> deparments = service.getDeparments();
-        System.out.println(deparments);
+        List<Map<String, Object>> departments = service.getDepartments();
+        System.out.println(departments);
     }
 
     @Test
@@ -191,6 +192,31 @@ public class test01 {
         DepartmentService service = new DepartmentService();
         List<Map<String, Object>> members = service.getMembers(5);
         System.out.println(members);
+    }
+
+    @Test
+    public void getConferences() {
+        MeetingService service = new MeetingService();
+        List<Map<String, Object>> conferences = service.getConferences();
+        System.out.println(conferences);
+    }
+
+    @Test
+    public void getConference() throws SQLException {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from conference where id = ?");
+        ResultSetHandler<Conference> h = new BeanHandler<>(Conference.class,
+                new BasicRowProcessor(new GenerousBeanProcessor()));
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        Conference query = runner.query(sql.toString(), h, 1);
+        System.out.println(query);
+    }
+
+    @Test
+    public void getConferenceId() {
+        MeetingService service = new MeetingService();
+        int conferenceId = service.getConferenceId();
+        System.out.println(conferenceId);
     }
 
 }

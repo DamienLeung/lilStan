@@ -1,3 +1,5 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +16,8 @@
     <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <link rel="stylesheet" href="../assets/css/layer.css">
     <title>发布会议</title>
     <style>
         /*这个是这页面特有的，需要单独写出来*/
@@ -25,36 +29,7 @@
     </style>
 </head>
 <body>
-<header class="header">
-    <nav class="navbar navbar-expand-lg">
-        <div class="search-panel">
-            <div class="search-inner d-flex align-items-center justify-content-center">
-                <div class="close-btn">Close <i class="fa fa-close"></i></div>
-                <form id="searchForm" action="#">
-                    <div class="form-group">
-                        <input type="search" name="search" placeholder="What are you searching for...">
-                        <button type="submit" class="submit">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="container-fluid d-flex align-items-center justify-content-between">
-            <div class="navbar-header">
-                <!-- Navbar Header--><a href="home.jsp" class="navbar-brand">
-                <div class="brand-text brand-big visible text-uppercase"><strong class="text-primary">小标</strong><strong>交友</strong></div>
-                <div class="brand-text brand-sm"><strong class="text-primary">X</strong><strong>B</strong></div></a>
-                <!-- Sidebar Toggle Btn-->
-                <button class="sidebar-toggle"><i class="fa fa-long-arrow-left"></i></button>
-            </div>
-            <div class="right-menu list-inline no-margin-bottom">
-                <!-- Log out -->
-                <div class="list-inline-item logout">
-                    <a id="logout" href="../index.jsp" class="nav-link"><span class="d-none d-sm-inline">Logout </span></a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+<%@ include file="header.jsp" %>
 
 <div class="d-flex align-items-stretch">
     <!-- Sidebar Navigation-->
@@ -63,8 +38,8 @@
         <div class="sidebar-header d-flex align-items-center">
             <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle"></div>
             <div class="title">
-                <h1 class="h5">小标</h1>
-                <p>研发部</p>
+                <h1 class="h5">${sessionScope.userInfo.username}</h1>
+                <p>${sessionScope.userInfo.deptName}</p>
             </div>
         </div>
         <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
@@ -72,18 +47,18 @@
             <li><a href="home.jsp"> <i class="icon-home"></i>主页 </a></li>
             <li><a href="#userDropdown"  data-toggle="collapse" > <i class="icon-windows"></i>用户列表</a>
                 <ul id="userDropdown" class="collapse list-unstyled">
-                    <li><a href="user.jsp">查看用户</a></li>
-                    <li><a href="my_user.jsp">我关注的用户</a></li>
-                    <li><a href="article.jsp">发布文章</a></li>
-                    <li><a href="article_collect.jsp">我的收藏</a></li>
+                    <li><a href="<c:url value="/user/page"/>">查看用户</a></li>
+                    <li><a href="<c:url value="/myUser/page"/>">我关注的用户</a></li>
+                    <li><a href="<c:url value="/article/showArticle"/>">发布文章</a></li>
+                    <li><a href="<c:url value="/articleCol/showFavedArticles"/>">我的收藏</a></li>
                 </ul>
             </li>
             <!--<li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>-->
 
             <li><a href="#depDropdown"  data-toggle="collapse" aria-expanded="true"> <i class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse show ">
-                    <li><a href="department.jsp">全部部门</a></li>
-                    <li><a href="meeting.html">会议系统</a></li>
+                    <li><a href="<c:url value="/department/showMembers"/>">全部部门</a></li>
+                    <li><a href="<c:url value="/meeting/showMeeting"/>">会议系统</a></li>
                 </ul>
             </li>
 
@@ -104,29 +79,29 @@
                 <form>
                     <div class="form-group">
                         <label class="form-control-label">标题</label>
-                        <input type="text" placeholder="会议标题" class="form-control">
+                        <input type="text" placeholder="会议标题" class="form-control" name="title">
                     </div>
                     <!--选择部门-->
                     <div class="form-group">
-                        <select name="dep" class="form-control">
+                        <select name="dept" class="form-control">
                             <option>请选择部门</option>
-                            <option>研发部</option>
-                            <option>电邀部</option>
-                            <option>推广部</option>
+                            <c:forEach items="${sessionScope.departments}" var="department">
+                                <option value="${department.id}">${department.name}</option>
+                            </c:forEach>
                         </select>
                     </div>
                     <!--开始时间-->
                     <div class="form-group">
                         <label class="form-control-label">开始时间</label>
-                        <input type="time" class="form-control">
+                        <input type="time" class="form-control" name="time">
 
                     </div>
                     <div class="form-group">
                         <label class="form-control-label">会议内容</label>
-                        <textarea class="form-control" rows="5"></textarea>
+                        <textarea class="form-control" rows="5" name="content"></textarea>
                     </div>
                     <div class="text-center form-group">
-                        <input type="submit" value="发布" class="btn btn-primary">
+                        <input type="button" value="发布" class="btn btn-primary submit">
                         <input type="reset" value="清空" class="btn btn-info">
                     </div>
                 </form>
@@ -153,6 +128,34 @@
 <script src="../assets/js/charts-home.js"></script>
 <script src="../assets/js/front.js"></script>
 <script src="../assets/js/custom.js"></script>
+<script src="../assets/js/layer.js"></script>
 
+<script>
+    $(".submit").click(function () {
+        let $title = $("[name='title']");
+        let $dept = $("[name='dept']");
+        let $time = $("[name='time']");
+        let $content = $("[name='content']");
+        var content = $content.val();
+        var time = $time.val();
+        var dept = $dept.val();
+        var title = $title.val();
+        $.post("/meeting/postMeeting", {
+            title:title,
+            content:content,
+            dept:dept,
+            time:time
+        }, function (data) {
+            if (data === "success")
+                layer.msg("發佈成功");
+            else
+                layer.msg("發佈失敗");
+        })
+        $dept.val("请选择部门");
+        $title.val("");
+        $time.val("");
+        $content.val("");
+    })
+</script>
 </body>
 </html>

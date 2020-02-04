@@ -52,7 +52,7 @@
             <li><a href="#depDropdown" data-toggle="collapse"> <i class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse list-unstyled ">
                     <li><a href="<c:url value="/department/showMembers"/>">全部部门</a></li>
-                    <li><a href="meeting.html">会议系统</a></li>
+                    <li><a href="<c:url value="/meeting/showMeeting"/>">会议系统</a></li>
                 </ul>
             </li>
 

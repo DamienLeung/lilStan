@@ -3,7 +3,8 @@ package dfbz.com.pojo;
 import dfbz.com.annotation.FieldAnnotation;
 import dfbz.com.annotation.TableAnnotation;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  *  conference
@@ -49,7 +50,7 @@ public class Conference{
      * Start time
      */
     @FieldAnnotation("start_time")
-    private Date startTime;
+    private Time startTime;
 
     /**
      * Conference status 0:Planning 1:Starting 2:Ended
@@ -107,11 +108,11 @@ public class Conference{
         this.publishDate = publishDate;
     }
 
-    public Date getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
@@ -121,6 +122,32 @@ public class Conference{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Conference(Integer id, String deptName, Integer deptId, String title,
+                      String content, Date publishDate, Time startTime, Integer status) {
+        this.id = id;
+        this.deptName = deptName;
+        this.deptId = deptId;
+        this.title = title;
+        this.content = content;
+        this.publishDate = publishDate;
+        this.startTime = startTime;
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Conference{" +
+                "id=" + id +
+                ", deptName='" + deptName + '\'' +
+                ", deptId=" + deptId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", publishDate=" + publishDate +
+                ", startTime=" + startTime +
+                ", status=" + status +
+                '}';
     }
 }
 

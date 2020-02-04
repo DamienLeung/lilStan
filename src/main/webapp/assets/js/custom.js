@@ -20,7 +20,7 @@ $(function () {
 
     //发布会议跳转链接
     $("#addMeet").click(function () {
-        window.location.href = '../../html/meeting_add.html'
+        window.location.href = '../../html/meeting_add.jsp'
     });
 
     //添加文章跳转链接
