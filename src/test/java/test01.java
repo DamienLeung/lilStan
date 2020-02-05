@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -197,7 +198,7 @@ public class test01 {
     @Test
     public void getConferences() {
         MeetingService service = new MeetingService();
-        List<Map<String, Object>> conferences = service.getConferences();
+        List<Map<String, Object>> conferences = service.getConferences(null, null, 1);
         System.out.println(conferences);
     }
 
@@ -219,4 +220,30 @@ public class test01 {
         System.out.println(conferenceId);
     }
 
+    @Test
+    public void getConJoinId() {
+        MeetingService service = new MeetingService();
+        int conJoinId = service.getConJoinId(2, 1);
+        System.out.println(conJoinId);
+    }
+
+    @Test
+    public void addConJoin() {
+        MeetingService service = new MeetingService();
+        service.attend(new ConJoin(1,1,1,1));
+    }
+
+    @Test
+    public void stringTest() throws UnsupportedEncodingException {
+        String string = null;
+        byte[] bytes = string.getBytes("ISO-8859-1");
+        string = new String(bytes, "UTF-8");
+    }
+
+    @Test
+    public void getSize() {
+        MeetingService service = new MeetingService();
+        List<Map<String, Object>> first = service.getConferences(null, null, 2);
+        System.out.println(first);
+    }
 }

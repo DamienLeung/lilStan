@@ -43,19 +43,19 @@ public class ConJoin {
         this.id = id;
     }
 
-    public Integer getuId() {
+    public Integer getUId() {
         return uId;
     }
 
-    public void setuId(Integer uId) {
+    public void setUId(Integer uId) {
         this.uId = uId;
     }
 
-    public Integer getcId() {
+    public Integer getCId() {
         return cId;
     }
 
-    public void setcId(Integer cId) {
+    public void setCId(Integer cId) {
         this.cId = cId;
     }
 
@@ -64,6 +64,13 @@ public class ConJoin {
     }
 
     public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public ConJoin(Integer id, Integer uId, Integer cId, Integer status) {
+        this.id = id;
+        this.uId = uId;
+        this.cId = cId;
         this.status = status;
     }
 }

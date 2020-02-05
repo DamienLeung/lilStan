@@ -72,7 +72,7 @@
             <div class="list-group myFavList">
                 <!--搜索文章的条件-->
                 <div class="myTitle">
-                    <form class="form-inline">
+                    <form class="form-inline" action="<c:url value="/meeting/showMeeting"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
                             <input id="inlineFormInput" value="${sessionScope.pattern}" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control" name="pattern">
@@ -83,7 +83,7 @@
                         <!--选择部门-->
                         <div class="form-group">
                             <select name="dept" class="form-control">
-                                <option>请选择部门</option>
+                                <option value="">请选择部门</option>
                                 <c:forEach items="${sessionScope.departments}" var="department">
                                     <option value="${department.id}">${department.name}</option>
                                 </c:forEach>
@@ -126,11 +126,12 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        <c:forEach var="index" varStatus="status" begin="${sessionScope.startPage}"
+                                   end="${sessionScope.endPage}" step="1">
+                            <li>
+                                <a href="<c:url value="/meeting/showMeeting?page=${index}&&pattern=${sessionScope.pattern}&&dept=${sessionScope.deptId}"/>">${index}</a>
+                            </li>
+                        </c:forEach>
                         <li>
                             <a href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
@@ -162,5 +163,29 @@
 <script src="../assets/js/front.js"></script>
 <script src="../assets/js/custom.js"></script>
 <script src="../assets/js/layer.js"></script>
+
+<script>
+    $("#Previous").click(function () {
+        var firstPage = "${sessionScope.startPage}";
+        var pattern = '${sessionScope.pattern}';
+        if (Number(firstPage) < 6) {
+            layer.msg("頁碼已經到頂了");
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/meeting/showMeeting?page=' + (Number(firstPage) - 1) + '&&pattern=' + pattern + '&&deptId=' + ${sessionScope.deptId};
+        }
+
+    });
+
+    $("#Next").click(function () {
+        var firstPage = '${sessionScope.startPage}';
+        var pattern = '${sessionScope.pattern}';
+
+        if (Number(firstPage) + 5 > ${sessionScope.maxPage}) {
+            layer.msg("頁碼已經到底了");
+        } else {
+            window.location.href = '${pageContext.request.contextPath}/meeting/showMeeting?page=' + Number(Number(firstPage) + 5) + '&&pattern=' + pattern + '&&deptId=' + ${sessionScope.deptId};
+        }
+    });
+</script>
 </body>
 </html>
