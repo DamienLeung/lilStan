@@ -38,6 +38,7 @@ public class MeetingService {
     public Integer getConJoinId(Integer id, Integer meetingId) {
         return dao.getConJoinId(id, meetingId);
     }
+
     public int getConJoinId() {
         return dao.getConJoinId();
     }

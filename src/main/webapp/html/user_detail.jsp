@@ -131,7 +131,12 @@
                                 <label class="col-sm-3 form-control-label">是否私密 <br><small class="text-primary">默认为否，可以不设置</small></label>
                                 <div class="col-sm-9">
                                     <div class="i-checks">
-                                        <input disabled="disabled" id="checkboxCustom1" type="checkbox" value="" class="checkbox-template">
+                                        <c:if test="${sessionScope.userDetail.isSecret == 0}">
+                                            <input disabled="disabled" id="checkboxCustom1" type="checkbox" value="" class="checkbox-template">
+                                        </c:if>
+                                        <c:if test="${sessionScope.userDetail.isSecret == 1}">
+                                            <input disabled="disabled" id="checkboxCustom1" type="checkbox" value="" class="checkbox-template" checked>
+                                        </c:if>
                                         <label for="checkboxCustom1">是否私密</label>
                                     </div>
 

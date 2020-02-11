@@ -132,6 +132,20 @@ public class UserServlet extends BaseServlet {
         String userId = req.getParameter("id");
         detailService.viewIncretment(Integer.parseInt(userId));
         Map<String, Object> userDetail = detailService.getUserDetail(Integer.parseInt(userId));
+        Object isSecret = userDetail.get("isSecret");
+        Object pic = userDetail.get("pic");
+        Object realName = userDetail.get("realName");
+        Object name = userDetail.get("name");
+        Object gender = userDetail.get("gender");
+        if (isSecret != null)
+            if (isSecret.equals("1")) {
+                userDetail.clear();
+                userDetail.put("isSecret", "1");
+                userDetail.put("pic", pic);
+                userDetail.put("realName", realName);
+                userDetail.put("name", name);
+                userDetail.put("gender", gender);
+            }
         req.getSession().setAttribute("userDetail", userDetail);
         resp.sendRedirect(req.getContextPath() + "/html/user_detail.jsp");
     }

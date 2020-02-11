@@ -92,9 +92,14 @@
                         <!--选择部门-->
                         <div class="form-group">
                             <select name="dept" class="form-control">
+                                <c:if test="${sessionScope.deptName != null}">
+                                    <option value="${sessionScope.deptId}">${sessionScope.deptName}</option>
+                                </c:if>
                                 <option value="">请选择部门</option>
                                 <c:forEach items="${sessionScope.departments}" var="department">
-                                    <option value="${department.id}">${department.name}</option>
+                                    <c:if test="${sessionScope.deptName != department.name}">
+                                        <option value="${department.id}">${department.name}</option>
+                                    </c:if>
                                 </c:forEach>
                             </select>
                         </div>

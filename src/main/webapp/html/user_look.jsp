@@ -83,7 +83,7 @@
                                     <select class="selectpicker" data-live-search="true" name="selector">
                                         <option>${sessionScope.userDetail.deptName}</option>
                                         <c:forEach items="${sessionScope.departments}" var="department">
-                                            <c:if test="${sessionScope.userDetail.deptName} != ${department.name}">
+                                            <c:if test="${sessionScope.userDetail.deptName != department.name}">
                                                 <option value="${department.id}">${department.name}</option>
                                             </c:if>
                                         </c:forEach>
@@ -229,6 +229,8 @@
             gender: gender,
             isSecret: isSecret
         });
+
+
     });
 </script>
 </body>

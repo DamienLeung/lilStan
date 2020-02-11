@@ -49,15 +49,19 @@ public class MeetingServlet extends BaseServlet {
                 conferences = service.getConferences(pattern, Integer.parseInt(deptId), page);
                 listSize = service.getListSize(pattern, Integer.parseInt(deptId));
                 req.getSession().setAttribute("deptId", deptId);
+                String deptName = service.getDeptName(Integer.parseInt(deptId));
+                req.getSession().setAttribute("deptName", deptName);
             } else {
                 conferences = service.getConferences(pattern, null, page);
                 listSize = service.getListSize(pattern, null);
                 req.getSession().setAttribute("deptId", null);
+                req.getSession().setAttribute("deptName", null);
             }
         } else {
             conferences = service.getConferences(pattern, null, page);
             listSize = service.getListSize(pattern, null);
             req.getSession().setAttribute("deptId", null);
+            req.getSession().setAttribute("deptName", null);
         }
         int pageSize = listSize % 5 == 0 ?
                 listSize / 5 :

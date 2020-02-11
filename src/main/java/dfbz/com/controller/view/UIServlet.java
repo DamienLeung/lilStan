@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebServlet("/view/home")
+@WebServlet("/view/*")
 public class UIServlet extends BaseServlet {
 
     UserService service = new UserService();

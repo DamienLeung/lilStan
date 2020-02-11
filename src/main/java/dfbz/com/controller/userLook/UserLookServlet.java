@@ -11,6 +11,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +67,6 @@ public class UserLookServlet extends BaseServlet {
                 null, null, null);
 
         service.updateDetail(user, info);
-
 
     }
 

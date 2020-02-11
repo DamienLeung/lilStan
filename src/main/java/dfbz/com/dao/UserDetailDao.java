@@ -13,17 +13,17 @@ public class UserDetailDao extends BaseDao<UserInfo> {
     public Map<String, Object> getUserDetail(Integer id) {
         try {
             if (id != null) {
-                StringBuilder sql = new StringBuilder();
-                sql.append("select ui.user_id as userId, ui.real_name as realName, ui.age, ui.`look`, d.name, ui.age, ");
-                sql.append("ui.phone, ui.`desc` as intro, ui.register_time as RegTime, ui.login_time as loginTime, ui.pic, ");
-                sql.append("(select count(*) as total from user_focus where user_focus_id = ui.user_id) as fansCount ");
-                sql.append("from user_info ui ");
-                sql.append("left join `user` u on u.id = ui.user_id ");
-                sql.append("left join dept d on d.id = ui.user_id ");
-                sql.append("where ui.user_id = ?");
                 QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
 
-                return runner.query(sql.toString(), new MapHandler(), id);
+                String sql = "select ui.user_id as userId, ui.real_name as realName, ui.age, ui.`look`, d.name, ui.gender, " +
+                        "u.is_secret as isSecret, " +
+                        "ui.phone, ui.`desc` as intro, ui.register_time as RegTime, ui.login_time as loginTime, ui.pic, " +
+                        "(select count(*) as total from user_focus where user_focus_id = ui.user_id) as fansCount " +
+                        "from user_info ui " +
+                        "left join `user` u on u.id = ui.user_id " +
+                        "left join dept d on d.id = ui.user_id " +
+                        "where ui.user_id = ?";
+                return runner.query(sql, new MapHandler(), id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
