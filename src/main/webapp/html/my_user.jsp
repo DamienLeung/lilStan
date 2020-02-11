@@ -98,8 +98,8 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <c:forEach var="index" varStatus="status" begin="${requestScope.startPage}"
-                                   end="${requestScope.endPage}" step="1">
+                        <c:forEach var="index" varStatus="status" begin="${startPage}"
+                                   end="${endPage}" step="1">
                             <li>
                                 <a href="<c:url value="/myUser/page?page=${index}"/>">${index}</a>
                             </li>
@@ -138,26 +138,20 @@
 
 <script>
     $("#Previous").click(function () {
-        var index = $(this).parent().siblings()[0];
-        var firstPage = $(index).text();
-        console.log(Number(firstPage));
+        var firstPage = "${startPage}";
         if (Number(firstPage) < 6) {
             layer.msg("頁碼已經到頂了");
         } else {
-            layer.msg("hello");
             window.location.href = '${pageContext.request.contextPath}/myUser/page?page=' + (Number(firstPage) - 1);
         }
 
     });
 
     $("#Next").click(function () {
-        var index = $(this).parent().siblings()[1];
-        var firstPage = $(index).text();
-        console.log(Number(firstPage));
-        if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+        var firstPage = "${startPage}";
+        if (Number(firstPage) + 5 > ${maxPage}) {
             layer.msg("頁碼已經到底了");
         } else {
-            layer.msg("hello");
             window.location.href = '${pageContext.request.contextPath}/myUser/page?page=' + Number(Number(firstPage) + 5);
         }
 

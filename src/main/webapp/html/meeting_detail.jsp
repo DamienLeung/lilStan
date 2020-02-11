@@ -88,20 +88,20 @@
 
             <div class="myTitle">
                 <h3 class="text-center">${sessionScope.conference.title}</h3>
-                <c:if test="${sessionScope.conference.status == 1}">
-                    <input type="button" value="${sessionScope.buttonVal}" class="btn btn-info attend">
+                <c:if test="${sessionScope.conference.status != 2}">
+                    <input type="button" value="${buttonVal}" class="btn btn-info attend">
                 </c:if>
-                <c:if test="${sessionScope.conference.status == 0}">
+                <c:if test="${sessionScope.conference.status == 2}">
                     <%--                    <input type="submit" value="取消会议" class="btn btn-block">--%>
-                    <input type="submit" value="参加会议" class="btn btn-light" disabled>
+                    <input type="submit" value="会议已结束" class="btn btn-light" disabled>
                 </c:if>
 
             </div>
 
             <div class="myContent">
                 <p class="h6"><strong>部门：</strong>${sessionScope.conference.deptName}</p>
-                <p class="h6" id="attendance"><strong>应到：</strong>10<span>人</span></p>
-                <p class="h6"><strong>实到：</strong>9<span>人</span></p>
+                <p class="h6" id="attendance"><strong>应到：</strong>${MembersNum}<span>人</span></p>
+                <p class="h6"><strong>实到：</strong>${conJoinNum}<span>人</span></p>
                 <p class="h6"><strong>未到：</strong>1<span>人</span></p>
                 <textarea style="padding: 2px" disabled="disabled" class="form-control"
                           rows="11">${sessionScope.conference.content}</textarea>
@@ -142,7 +142,7 @@
                 {
                     mId:${sessionScope.conference.id},
                     status:${sessionScope.conference.status},
-                    conJoinId:${sessionScope.conJoinId}
+                    conJoinId:${conJoinId}
                 },
                 function (data) {
                     if (data === "success") {
@@ -153,11 +153,10 @@
                 }
             );
             $(this).val("取消参加");
-        }
-        else {
+        } else if ($(this).val() === "取消参加") {
             $.post("/meeting/abort",
                 {
-                    conJoinId:${sessionScope.conJoinId}
+                    conJoinId:${conJoinId},
                 },
                 function (data) {
                     if (data === "success") {
@@ -169,12 +168,33 @@
                 }
             );
             $(this).val("参加会议");
+        } else if ($(this).val() === "开始会议") {
+            $.post("/meeting/changeStatus",
+                {
+                    mId:${sessionScope.conference.id},
+                    status: 1,
+                    conJoinId:${conJoinId}
+                },
+                function (data) {
+                    layer.msg("會議開始了")
+                }
+            );
+            $(this).val("结束会议");
+        } else {
+            $.post("/meeting/changeStatus",
+                {
+                    mId:${sessionScope.conference.id},
+                    status: 2,
+                    conJoinId:${conJoinId}
+                },
+                function (data) {
+                    layer.msg("會議結束了")
+                }
+            );
+            $(this).val("会议已结束");
+            $(this).attr("disabled", "disabled");
         }
     });
-
-    $(".cancel").click(function () {
-
-    })
 </script>
 </body>
 </html>

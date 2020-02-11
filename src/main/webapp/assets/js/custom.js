@@ -61,23 +61,23 @@ $(function () {
         $(this).parent().css("display", "none");
     });
 
-    $(".table").find("input[type='checkbox']").on("click", function () {
-        if ($(this).prop("checked")) {
-            var uId = $(this).attr("data-uid");
-            var aId = $("#userId").val;
-            if (uId === aId)
-                layer.msg("不能關注自己");
-            else {
-                layer.msg("关注成功");
-            }
-
-        } else {
-
-            layer.msg("取关成功")
-
-        }
-
-    })
+    // $(".table").find("input[type='checkbox']").on("click", function () {
+    //     if ($(this).prop("checked")) {
+    //         var uId = $(this).attr("data-uid");
+    //         var aId = $("#userId").val;
+    //         if (uId === aId)
+    //             layer.msg("不能關注自己");
+    //         else {
+    //             layer.msg("关注成功");
+    //         }
+    //
+    //     } else {
+    //
+    //         layer.msg("取关成功")
+    //
+    //     }
+    //
+    // })
 
     /*$('.chosen').chosen({
         no_results_text: "没有找到结果！",//搜索无结果时显示的提示

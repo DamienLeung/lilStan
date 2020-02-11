@@ -6,6 +6,7 @@ import dfbz.com.pojo.Article;
 import dfbz.com.pojo.ConJoin;
 import dfbz.com.pojo.Conference;
 import dfbz.com.pojo.Department;
+import dfbz.com.service.DepartmentService;
 import dfbz.com.util.JDBCUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
@@ -63,12 +64,14 @@ public class MeetingDao extends BaseDao<Conference> {
     public int getConferenceId() {
         StringBuilder sql = new StringBuilder();
         String tableName = Conference.class.getAnnotation(TableAnnotation.class).value();
-        sql.append("select id from ").append(tableName);
+        sql.append("select id from ").append(tableName).append(" ");
+        sql.append("order by id");
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         try {
             List<Map<String, Object>> query = runner.query(sql.toString(), new MapListHandler());
+            System.out.println(query);
             if (query.size() > 0)
-                return Integer.parseInt(query.get(query.size() - 1).get("id").toString()) + 1;
+                return (Integer.parseInt(query.get(query.size() - 1).get("id").toString()) + 1);
             else
                 return 1;
         } catch (SQLException e) {
@@ -164,5 +167,19 @@ public class MeetingDao extends BaseDao<Conference> {
             }
         }
         return 0;
+    }
+
+    public List<Map<String, Object>> getJoinNum(Integer conId) {
+        StringBuilder sql = new StringBuilder();
+        String tableName = ConJoin.class.getAnnotation(TableAnnotation.class).value();
+        sql.append("select * from ").append(tableName).append(" ");
+        sql.append("where c_id = ?");
+        QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
+        try {
+            return runner.query(sql.toString(), new MapListHandler(), conId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

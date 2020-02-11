@@ -57,6 +57,8 @@ public class Conference{
      */
     private Integer status;
 
+    private Integer publisherId;
+
     public Conference() {
     }
 
@@ -124,8 +126,16 @@ public class Conference{
         this.status = status;
     }
 
-    public Conference(Integer id, String deptName, Integer deptId, String title,
-                      String content, Date publishDate, Time startTime, Integer status) {
+    public Integer getPublisherId() {
+        return publisherId;
+    }
+
+    public void setPublisherId(Integer publisherId) {
+        this.publisherId = publisherId;
+    }
+
+    public Conference(Integer id, String deptName, Integer deptId, String title, String content, Date publishDate,
+                      Time startTime, Integer status, Integer publisherId) {
         this.id = id;
         this.deptName = deptName;
         this.deptId = deptId;
@@ -134,6 +144,7 @@ public class Conference{
         this.publishDate = publishDate;
         this.startTime = startTime;
         this.status = status;
+        this.publisherId = publisherId;
     }
 
     @Override
@@ -147,6 +158,7 @@ public class Conference{
                 ", publishDate=" + publishDate +
                 ", startTime=" + startTime +
                 ", status=" + status +
+                ", publisherId=" + publisherId +
                 '}';
     }
 }

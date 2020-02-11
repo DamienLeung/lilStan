@@ -30,13 +30,12 @@ public class LoginFilter implements Filter {
             }
             if (b) {
                 Object obj = req.getSession().getAttribute("userId");
+                System.out.println(obj);
                 if (obj != null)
                     resp.sendRedirect(req.getContextPath() + "/view/home");
-            } else {
-                chain.doFilter(req, resp);
             }
         }
-
+        chain.doFilter(req, resp);
     }
 
     @Override

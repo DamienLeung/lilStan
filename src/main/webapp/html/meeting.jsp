@@ -58,7 +58,8 @@
             </li>
             <!--<li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>-->
 
-            <li><a href="#depDropdown" data-toggle="collapse" aria-expanded="true"> <i class="icon-windows2"></i>部门列表</a>
+            <li><a href="#depDropdown" data-toggle="collapse" aria-expanded="true"> <i
+                    class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse show">
                     <li><a href="<c:url value="/department/showMembers"/>">全部部门</a></li>
                     <li class="active"><a href="<c:url value="/meeting/showMeeting"/>">会议系统</a></li>
@@ -84,7 +85,8 @@
                     <form class="form-inline" action="<c:url value="/meeting/showMeeting"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
-                            <input id="inlineFormInput" value="${sessionScope.pattern}" type="text" placeholder="按标题名字查找" class="mr-sm-3 form-control" name="pattern">
+                            <input id="inlineFormInput" value="${pattern}" type="text" placeholder="按标题名字查找"
+                                   class="mr-sm-3 form-control" name="pattern">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="查询" class="btn btn-primary">
@@ -92,12 +94,12 @@
                         <!--选择部门-->
                         <div class="form-group">
                             <select name="dept" class="form-control">
-                                <c:if test="${sessionScope.deptName != null}">
-                                    <option value="${sessionScope.deptId}">${sessionScope.deptName}</option>
+                                <c:if test="${deptName != null}">
+                                    <option value="${deptId}">${deptName}</option>
                                 </c:if>
                                 <option value="">请选择部门</option>
                                 <c:forEach items="${sessionScope.departments}" var="department">
-                                    <c:if test="${sessionScope.deptName != department.name}">
+                                    <c:if test="${deptName != department.name}">
                                         <option value="${department.id}">${department.name}</option>
                                     </c:if>
                                 </c:forEach>
@@ -105,7 +107,7 @@
                         </div>
                     </form>
 
-                    <input id = "addMeet" type="submit" value="发布会议" class="btn btn-primary">
+                    <input id="addMeet" type="submit" value="发布会议" class="btn btn-primary">
 
 
                 </div>
@@ -114,19 +116,21 @@
                     <c:forEach items="${sessionScope.conferences}" var="meeting">
                         <li class="list-group-item">
                             <div style="float: right;">
-
+                                <c:if test="${meeting.status == 0}">
+                                    <span><strong>状态：</strong>未開始</span>
+                                </c:if>
                                 <c:if test="${meeting.status == 1}">
                                     <span><strong>状态：</strong>正在進行</span>
                                 </c:if>
-                                <c:if test="${meeting.status == 0}">
-                                    <span><strong>状态：</strong>已完成</span>
+                                <c:if test="${meeting.status == 2}">
+                                    <span><strong>状态：</strong>已結束</span>
                                 </c:if>
                             </div>
                             <a href="<c:url value="/meeting/getMeetingDetail?id=${meeting.id}"/>">${meeting.title}</a>
                             <p class="h6"><strong>部门：</strong>${meeting.deptName}</p>
                             <p class="h6"><strong>日期：</strong>${meeting.publishDate}</p>
                             <p style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis">
-                                ${meeting.content}</p>
+                                    ${meeting.content}</p>
                         </li>
                     </c:forEach>
 
@@ -136,18 +140,18 @@
                 <nav class="text-center" aria-label="Page navigation">
                     <ul class="pagination">
                         <li>
-                            <a href="#" aria-label="Previous">
+                            <a href="#" aria-label="Previous" id="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <c:forEach var="index" varStatus="status" begin="${sessionScope.startPage}"
-                                   end="${sessionScope.endPage}" step="1">
+                        <c:forEach var="index" varStatus="status" begin="${startPage}"
+                                   end="${endPage}" step="1">
                             <li>
-                                <a href="<c:url value="/meeting/showMeeting?page=${index}&&pattern=${sessionScope.pattern}&&dept=${sessionScope.deptId}"/>">${index}</a>
+                                <a href="<c:url value="/meeting/showMeeting?page=${index}&&pattern=${pattern}&&dept=${deptId}"/>">${index}</a>
                             </li>
                         </c:forEach>
                         <li>
-                            <a href="#" aria-label="Next">
+                            <a href="#" aria-label="Next" id="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -180,24 +184,24 @@
 
 <script>
     $("#Previous").click(function () {
-        var firstPage = "${sessionScope.startPage}";
-        var pattern = '${sessionScope.pattern}';
+        var firstPage = "${startPage}";
+        var pattern = '${pattern}';
         if (Number(firstPage) < 6) {
             layer.msg("頁碼已經到頂了");
         } else {
-            window.location.href = '${pageContext.request.contextPath}/meeting/showMeeting?page=' + (Number(firstPage) - 1) + '&&pattern=' + pattern + '&&deptId=' + ${sessionScope.deptId};
+            window.location.href = '${pageContext.request.contextPath}/meeting/showMeeting?page=' + (Number(firstPage) - 1) + '&&pattern=' + pattern + '&&deptId=' + '${deptId}';
         }
 
     });
 
     $("#Next").click(function () {
-        var firstPage = '${sessionScope.startPage}';
-        var pattern = '${sessionScope.pattern}';
+        var firstPage = '${startPage}';
+        var pattern = '${pattern}';
 
-        if (Number(firstPage) + 5 > ${sessionScope.maxPage}) {
+        if (Number(firstPage) + 5 > ${maxPage}) {
             layer.msg("頁碼已經到底了");
         } else {
-            window.location.href = '${pageContext.request.contextPath}/meeting/showMeeting?page=' + Number(Number(firstPage) + 5) + '&&pattern=' + pattern + '&&deptId=' + ${sessionScope.deptId};
+            window.location.href = '${pageContext.request.contextPath}/meeting/showMeeting?page=' + Number(Number(firstPage) + 5) + '&&pattern=' + pattern + '&&deptId=' + '${deptId}';
         }
     });
 </script>

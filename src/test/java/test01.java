@@ -139,13 +139,10 @@ public class test01 {
         List<Map<String, Object>> userIdFollowed = dao.getUserIdFollowed(1);
         List<Map<String, Object>> userIdFavedArticle = dao.getFavDetail(1);
         List<Map<String, Object>> usernames = new ArrayList<>();
-        for (int i = 0; i < userIdFavedArticle.size(); i++) {
-            for (int i1 = 0; i1 < userIdFollowed.size(); i1++) {
-                if (userIdFavedArticle.get(i).get("uId") == (userIdFollowed.get(i1).get("id"))) {
-                    if (userIdFollowed.get(i1).get("realName") != null)
-                        usernames.add(userIdFollowed.get(i1));
-                    else
-                        usernames.add(userIdFollowed.get(i1));
+        for (Map<String, Object> objectMap : userIdFavedArticle) {
+            for (Map<String, Object> stringObjectMap : userIdFollowed) {
+                if (objectMap.get("uId") == (stringObjectMap.get("id"))) {
+                    usernames.add(stringObjectMap);
                 }
             }
         }
@@ -204,12 +201,10 @@ public class test01 {
 
     @Test
     public void getConference() throws SQLException {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select * from conference where id = ?");
         ResultSetHandler<Conference> h = new BeanHandler<>(Conference.class,
                 new BasicRowProcessor(new GenerousBeanProcessor()));
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
-        Conference query = runner.query(sql.toString(), h, 1);
+        Conference query = runner.query("select * from conference where id = ?", h, 1);
         System.out.println(query);
     }
 
@@ -234,16 +229,16 @@ public class test01 {
     }
 
     @Test
-    public void stringTest() throws UnsupportedEncodingException {
-        String string = null;
-        byte[] bytes = string.getBytes("ISO-8859-1");
-        string = new String(bytes, "UTF-8");
-    }
-
-    @Test
     public void getSize() {
         MeetingService service = new MeetingService();
         List<Map<String, Object>> first = service.getConferences(null, null, 2);
         System.out.println(first);
+    }
+
+    @Test
+    public void getConJoinNum() {
+        MeetingService service = new MeetingService();
+        int joinNumber = service.getJoinNumber(3);
+        System.out.println(joinNumber);
     }
 }

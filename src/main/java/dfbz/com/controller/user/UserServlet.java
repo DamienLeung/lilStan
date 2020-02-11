@@ -123,6 +123,7 @@ public class UserServlet extends BaseServlet {
         String ufId = req.getParameter("ufId");
         if (ufId != null) {
             service.unfollow(Integer.parseInt(ufId));
+            resp.getWriter().write("success");
         } else {
             resp.getWriter().write("請輸入ufId");
         }

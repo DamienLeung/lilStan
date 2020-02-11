@@ -50,4 +50,28 @@ public class MeetingService {
     public void abort(Integer id) {
         new BaseDao<ConJoin>().delById(id, ConJoin.class);
     }
+
+    public int getJoinNumber(Integer conId) {
+        List<Map<String, Object>> joinNum = dao.getJoinNum(conId);
+        if (joinNum != null) {
+            return joinNum.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public int getMembers(Integer deptId) {
+        List<Map<String, Object>> members = new DepartmentService().getMembers(deptId);
+        return members.size();
+    }
+
+    public void updateStatus(int mId, int conJoinId, int status) {
+        Conference conference = getConferenceDetail(mId);
+        BaseDao<ConJoin> baseDao = new BaseDao<>();
+        ConJoin conJoin = baseDao.rowQuery("id", conJoinId, ConJoin.class);
+        conference.setStatus(status);
+        conJoin.setStatus(status);
+        dao.save(conference);
+        baseDao.save(conJoin);
+    }
 }

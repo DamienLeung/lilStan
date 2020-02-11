@@ -8,6 +8,7 @@ import dfbz.com.service.DepartmentService;
 import dfbz.com.service.MeetingService;
 import javafx.beans.property.IntegerProperty;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,6 @@ public class MeetingServlet extends BaseServlet {
     private MeetingService service = new MeetingService();
 
     public void showMeeting(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.getSession().setAttribute("pattern", null);
         String pattern = req.getParameter("pattern");
         String deptId = req.getParameter("dept");
         String pageStr = req.getParameter("page");
@@ -48,41 +48,46 @@ public class MeetingServlet extends BaseServlet {
             if (!deptId.equals("")) {
                 conferences = service.getConferences(pattern, Integer.parseInt(deptId), page);
                 listSize = service.getListSize(pattern, Integer.parseInt(deptId));
-                req.getSession().setAttribute("deptId", deptId);
+                req.setAttribute("deptId", deptId);
                 String deptName = service.getDeptName(Integer.parseInt(deptId));
-                req.getSession().setAttribute("deptName", deptName);
+                req.setAttribute("deptName", deptName);
             } else {
                 conferences = service.getConferences(pattern, null, page);
                 listSize = service.getListSize(pattern, null);
-                req.getSession().setAttribute("deptId", null);
-                req.getSession().setAttribute("deptName", null);
+                req.setAttribute("deptId", null);
+                req.setAttribute("deptName", null);
             }
         } else {
             conferences = service.getConferences(pattern, null, page);
             listSize = service.getListSize(pattern, null);
-            req.getSession().setAttribute("deptId", null);
-            req.getSession().setAttribute("deptName", null);
+            req.setAttribute("deptId", null);
+            req.setAttribute("deptName", null);
         }
         int pageSize = listSize % 5 == 0 ?
                 listSize / 5 :
                 listSize / 5 + 1;
         int startPage = (page - 1) / 5 * 5 + 1;
-        req.getSession().setAttribute("startPage", startPage);
+        req.setAttribute("startPage", startPage);
         if ((startPage + 4) < pageSize)
-            req.getSession().setAttribute("endPage", startPage + 4);
+            req.setAttribute("endPage", startPage + 4);
         else
-            req.getSession().setAttribute("endPage", pageSize);
-        req.getSession().setAttribute("pattern", pattern);
-        req.getSession().setAttribute("maxPage", pageSize);
+            req.setAttribute("endPage", pageSize);
+        req.setAttribute("pattern", pattern);
+        req.setAttribute("maxPage", pageSize);
         req.getSession().setAttribute("conferences", conferences);
 
         List<Map<String, Object>> departments = new DepartmentService().getDepartments();
         req.getSession().setAttribute("departments", departments);
-        resp.sendRedirect(req.getContextPath() + "/html/meeting.jsp");
+        try {
+            req.getRequestDispatcher(req.getContextPath() + "/html/meeting.jsp").forward(req, resp);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 
     public void postMeeting(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Integer conferenceId = service.getConferenceId();
+        String userId = req.getSession().getAttribute("userId").toString();
         String title = req.getParameter("title");
         String deptId = req.getParameter("dept");
         String content = req.getParameter("content");
@@ -94,12 +99,17 @@ public class MeetingServlet extends BaseServlet {
         if (deptId != null) {
             String deptName = service.getDeptName(Integer.parseInt(deptId));
             conference = new Conference(conferenceId, deptName, Integer.parseInt(deptId),
-                    title, content, publishDate, publishTime, 1);
+                    title, content, publishDate, publishTime, 0, Integer.parseInt(userId));
         } else {
             conference = new Conference(conferenceId, null, null, title,
-                    content, publishDate, publishTime, 1);
+                    content, publishDate, publishTime, 0, Integer.parseInt(userId));
         }
         service.postConference(conference);
+        service.attend(new ConJoin(
+                service.getConJoinId(),
+                Integer.parseInt(userId),
+                conference.getId(),
+                conference.getStatus()));
         resp.getWriter().write("success");
     }
 
@@ -110,15 +120,28 @@ public class MeetingServlet extends BaseServlet {
             Conference conference = service.getConferenceDetail(Integer.parseInt(meetingId));
             req.getSession().setAttribute("conference", conference);
             Integer conJoinId = service.getConJoinId(Integer.parseInt(userId), Integer.parseInt(meetingId));
+            req.setAttribute("conJoinNum", service.getJoinNumber(Integer.parseInt(meetingId)));
+            req.setAttribute("MembersNum", service.getMembers(conference.getDeptId()));
             if (conJoinId != null) {
-                req.getSession().setAttribute("buttonVal", "取消参加");
-                req.getSession().setAttribute("conJoinId", conJoinId);
+                if (!userId.equals(conference.getPublisherId().toString()))
+                    req.setAttribute("buttonVal", "取消参加");
+                else if (conference.getStatus() == 0)
+                    req.setAttribute("buttonVal", "开始会议");
+                else if (conference.getStatus() == 1)
+                    req.setAttribute("buttonVal", "结束会议");
+                    else
+                    req.setAttribute("buttonVal", "会议已结束");
+                req.setAttribute("conJoinId", conJoinId);
             } else {
-                req.getSession().setAttribute("buttonVal", "参加会议");
-                req.getSession().setAttribute("conJoinId", service.getConJoinId());
+                req.setAttribute("buttonVal", "参加会议");
+                req.setAttribute("conJoinId", service.getConJoinId());
             }
         }
-        resp.sendRedirect("/html/meeting_detail.jsp");
+        try {
+            req.getRequestDispatcher(req.getContextPath() + "/html/meeting_detail.jsp").forward(req, resp);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 
     public void attend(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -138,5 +161,12 @@ public class MeetingServlet extends BaseServlet {
         String id = req.getParameter("conJoinId");
         service.abort(Integer.parseInt(id));
         resp.getWriter().write("success");
+    }
+
+    public void changeStatus(HttpServletRequest req, HttpServletResponse resp) {
+        int status = Integer.parseInt(req.getParameter("status"));
+        int conJoinId = Integer.parseInt(req.getParameter("conJoinId"));
+        int mId = Integer.parseInt(req.getParameter("mId"));
+        service.updateStatus(mId, conJoinId, status);
     }
 }

@@ -35,8 +35,7 @@ public class ArticleServlet extends BaseServlet {
 
     public void showArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pageStr = req.getParameter("page");
-        req.getSession().setAttribute("pattern", "");
-        String pattern = null;
+        String pattern;
         try {
             int page = 1;
             if (pageStr != null)
@@ -53,13 +52,13 @@ public class ArticleServlet extends BaseServlet {
                         listSize / 5 :
                         listSize / 5 + 1;
                 int startPage = (page - 1) / 5 * 5 + 1;
-                req.getSession().setAttribute("startPage", startPage);
+                req.setAttribute("startPage", startPage);
                 if ((startPage + 4) < pageSize)
-                    req.getSession().setAttribute("endPage", startPage + 4);
+                    req.setAttribute("endPage", startPage + 4);
                 else
-                    req.getSession().setAttribute("endPage", pageSize);
-                req.getSession().setAttribute("pattern", pattern);
-                req.getSession().setAttribute("maxPage", pageSize);
+                    req.setAttribute("endPage", pageSize);
+                req.setAttribute("pattern", pattern);
+                req.setAttribute("maxPage", pageSize);
                 req.getSession().setAttribute("articleList", articles);
             } else {
                 List<Map<String, Object>> articles = service.getArticles(page, null);
@@ -68,17 +67,17 @@ public class ArticleServlet extends BaseServlet {
                         listSize / 5 :
                         listSize / 5 + 1;
                 int startPage = (page - 1) / 5 * 5 + 1;
-                req.getSession().setAttribute("startPage", startPage);
+                req.setAttribute("startPage", startPage);
                 if ((startPage + 4) < pageSize)
-                    req.getSession().setAttribute("endPage", startPage + 4);
+                    req.setAttribute("endPage", startPage + 4);
                 else
-                    req.getSession().setAttribute("endPage", pageSize);
+                    req.setAttribute("endPage", pageSize);
                 req.getSession().setAttribute("articleList", articles);
             }
-        } catch (UnsupportedEncodingException e) {
+            req.getRequestDispatcher(req.getContextPath() + "/html/article.jsp").forward(req, resp);
+        } catch (UnsupportedEncodingException | ServletException e) {
             e.printStackTrace();
         }
-        resp.sendRedirect(req.getContextPath() + "/html/article.jsp");
     }
 
     public void postArticle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -129,7 +128,7 @@ public class ArticleServlet extends BaseServlet {
         resp.sendRedirect(req.getContextPath() + "/html/article_detail.jsp");
     }
 
-    public void unfav(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public void unfav(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String favoriteId = req.getParameter("fId");
         if (favoriteId != null) {
             detailService.removeFav(Integer.parseInt(favoriteId));
@@ -137,7 +136,7 @@ public class ArticleServlet extends BaseServlet {
         }
     }
 
-    public void fav(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public void fav(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String userId = req.getSession().getAttribute("userId").toString();
         String articleId = req.getParameter("articleId");
         if (articleId != null) {

@@ -146,14 +146,14 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <c:forEach var="index" varStatus="status" begin="${requestScope.startPage}"
-                                   end="${requestScope.endPage}" step="1">
-                            <c:if test="${requestScope.pattern == null}">
+                        <c:forEach var="index" varStatus="status" begin="${startPage}"
+                                   end="${endPage}" step="1">
+                            <c:if test="${pattern == null}">
                                 <li><a href="<c:url value="/user/page?page=${index}"/>">${index}</a></li>
                             </c:if>
-                            <c:if test="${requestScope.pattern != null}">
+                            <c:if test="${pattern != null}">
                                 <li>
-                                    <a href="<c:url value="/user/searchUser?pattern=${requestScope.pattern}&&page=${index}"/>">${index}</a>
+                                    <a href="<c:url value="/user/searchUser?pattern=${pattern}&&page=${index}"/>">${index}</a>
                                 </li>
                             </c:if>
                         </c:forEach>
@@ -193,10 +193,9 @@
 
 <script>
     $("#prePage").click(function () {
-        var index = $(this).parent().siblings()[0];
-        var firstPage = $(index.firstChild).html();
-        var search = '${requestScope.pattern}';
-        if ('' === search) {
+        var firstPage = "${startPage}";
+        var pattern = '${pattern}';
+        if ('' === pattern) {
             if (Number(firstPage) < 6) {
                 layer.msg("頁碼已經到頂了");
             } else {
@@ -207,16 +206,15 @@
             if (Number(firstPage) < 6) {
                 layer.msg("頁碼已經到頂了");
             } else {
-                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + (Number(firstPage) - 1);
+                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${pattern}' + '&&page=' + (Number(firstPage) - 1);
             }
         }
     });
     $("#nextPage").click(function () {
-        var index = $(this).parent().siblings()[1];
-        var firstPage = $(index.firstChild).html();
-        var search = '${requestScope.pattern}';
+        var firstPage = "${startPage}";
+        var search = '${pattern}';
         if ('' === search) {
-            if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+            if (Number(firstPage) + 5 > '${maxPage}') {
                 layer.msg("頁碼已經到底了");
                 return;
             } else {
@@ -225,10 +223,10 @@
             console.log();
         } else {
             firstPage = index.innerText;
-            if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
+            if (Number(firstPage) + 5 > '${maxPage}') {
                 layer.msg("頁碼已經到底了");
             } else {
-                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${requestScope.pattern}' + '&&page=' + Number(Number(firstPage) + 5);
+                window.location.href = '${pageContext.request.contextPath}/user/searchUser?pattern=${pattern}' + '&&page=' + Number(Number(firstPage) + 5);
             }
         }
     });
@@ -239,6 +237,7 @@
             if (uId === id) {
                 $(this).click();
                 layer.msg("不能關注自己");
+                return;
             } else {
                 $.post("/user/follow", {uId: uId}, function (data) {
                     if ("success" === data) {
@@ -250,11 +249,13 @@
             }
         } else {
             var ufId = $(this).attr("data-ufId");
-            $.post("/user/unfollow", {ufId: ufId}, function (data) {
-                if ("success" === data) {
-                    layer.msg("已取消關注");
-                }
-            })
+            if (ufId !== '') {
+                $.post("/user/unfollow", {ufId: ufId}, function (data) {
+                    if ("success" === data) {
+                        layer.msg("已取消關注");
+                    }
+                })
+            }
         }
     });
 

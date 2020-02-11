@@ -83,7 +83,7 @@
                     <form class="form-inline" action="<c:url value="/articleCol/showFavedArticles"/>">
                         <div class="form-group">
                             <label for="inlineFormInput" class="sr-only">Name</label>
-                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" value="${sessionScope.pattern}" class="mr-sm-3 form-control" name="pattern">
+                            <input id="inlineFormInput" type="text" placeholder="按标题名字查找" value="${pattern}" class="mr-sm-3 form-control" name="pattern">
                         </div>
                         <div class="form-group">
                             <input type="submit" value="查询" class="btn btn-primary">
@@ -119,10 +119,10 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <c:forEach var="index" varStatus="status" begin="${sessionScope.startPage}"
-                                   end="${sessionScope.endPage}" step="1">
+                        <c:forEach var="index" varStatus="status" begin="${startPage}"
+                                   end="${endPage}" step="1">
                             <li>
-                                <a href="<c:url value="/articleCol/showFavedArticles?page=${index}&&pattern=${sessionScope.pattern}"/>">${index}</a>
+                                <a href="<c:url value="/articleCol/showFavedArticles?page=${index}&&pattern=${pattern}"/>">${index}</a>
                             </li>
                         </c:forEach>
                         <li>
@@ -170,8 +170,8 @@
         })
     });
     $("#Previous").click(function () {
-        var firstPage = '${sessionScope.startPage}';
-        var pattern = '${sessionScope.pattern}';
+        var firstPage = '${startPage}';
+        var pattern = '${pattern}';
         if (Number(firstPage) < 6) {
             layer.msg("頁碼已經到頂了");
         } else {
@@ -181,10 +181,10 @@
     });
 
     $("#Next").click(function () {
-        var firstPage = '${sessionScope.startPage}';
-        var pattern = '${sessionScope.pattern}';
+        var firstPage = '${startPage}';
+        var pattern = '${pattern}';
 
-        if (Number(firstPage) + 5 > ${sessionScope.maxPage}) {
+        if (Number(firstPage) + 5 > ${maxPage}) {
             layer.msg("頁碼已經到底了");
         } else {
             window.location.href = '${pageContext.request.contextPath}/articleCol/showFavedArticles?page=' + Number(Number(firstPage) + 5) + '&&pattern=' + pattern;
