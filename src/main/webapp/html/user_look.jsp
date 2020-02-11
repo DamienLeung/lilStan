@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../assets/css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="../assets/css/custom.css">
+
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-select.min.css">
     <title>个人中心</title>
 
@@ -38,8 +39,15 @@
             <div class="col-lg-12">
                 <div class="block">
                     <div class="title"><strong>我的头像</strong></div>
-                    <div class="avatar"><img src="${sessionScope.userDetail.pic}" alt="加载中..."
-                                             style="width: 150px;height: 150px" class="img-thumbnail rounded-circle">
+                    <div class="avatar">
+                    <c:if test="${sessionScope.userDetail.pic != null}">
+                        <img id="myPic" src="${sessionScope.userDetail.pic}" alt="加载中..."
+                                                 style="width: 150px;height: 150px" class="img-thumbnail rounded-circle">
+                    </c:if>
+                    <c:if test="${sessionScope.userDetail.pic == null}">
+                        <img id="myPic" src="<c:url value="/assets/img/avatar-6.jpg"/>" alt="加载中..."
+                             style="width: 150px;height: 150px" class="img-thumbnail rounded-circle">
+                    </c:if>
                     </div>
                     <div style="margin-top: 15px" class="text-left">
                         <!-- 用于展示上传文件名的表单 -->
@@ -74,48 +82,11 @@
                                 <div class="col-sm-9">
                                     <select class="selectpicker" data-live-search="true" name="selector">
                                         <option>${sessionScope.userDetail.deptName}</option>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"研发部\"}">
-                                            <option value="2">推广部</option>
-                                            <option value="3">行政部</option>
-                                            <option value="4">财务部</option>
-                                            <option value="5">总裁办公室</option>
-                                            <option value="7">秘书部</option>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"推广部\"}">
-                                            <option value="1">研发部</option>
-                                            <option value="3">行政部</option>
-                                            <option value="4">财务部</option>
-                                            <option value="5">总裁办公室</option>
-                                            <option value="7">秘书部</option>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"行政部\"}">
-                                            <option value="1">研发部</option>
-                                            <option value="2">推广部</option>
-                                            <option value="4">财务部</option>
-                                            <option value="5">总裁办公室</option>
-                                            <option value="7">秘书部</option>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"财务部\"}">
-                                            <option value="1">研发部</option>
-                                            <option value="2">推广部</option>
-                                            <option value="3">行政部</option>
-                                            <option value="5">总裁办公室</option>
-                                            <option value="7">秘书部</option>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"总裁办公室\"}">
-                                            <option value="1">研发部</option>
-                                            <option value="2">推广部</option>
-                                            <option value="3">行政部</option>
-                                            <option value="4">财务部</option>
-                                            <option value="7">秘书部</option>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userDetail.deptName == \"秘书处\"}">
-                                            <option value="1">研发部</option>
-                                            <option value="2">推广部</option>
-                                            <option value="3">行政部</option>
-                                            <option value="4">财务部</option>
-                                            <option value="5">总裁办公室</option>
-                                        </c:if>
+                                        <c:forEach items="${sessionScope.departments}" var="department">
+                                            <c:if test="${sessionScope.userDetail.deptName} != ${department.name}">
+                                                <option value="${department.id}">${department.name}</option>
+                                            </c:if>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>

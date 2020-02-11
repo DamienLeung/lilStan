@@ -68,9 +68,11 @@ public class UserDao extends BaseDao<User> {
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         Map<String, Object> map;
         try {
-            map = runner.query("select d.name as deptName, u.username as username from user u " +
+            map = runner.query("select d.name as deptName, u.username as username, ui.pic from user u " +
                             "left join dept d " +
                             "on d.id = u.dept_id " +
+                            "left join user_info ui " +
+                            "on ui.user_id = u.id " +
                             "where u.id=?;"
                     , new MapHandler(), id);
             return map;
@@ -81,7 +83,6 @@ public class UserDao extends BaseDao<User> {
     }
 
     public void register(User user) {
-        Class tClass = user.getClass();
         String tableName = getTableName();
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
         StringBuilder sql = new StringBuilder("insert into ");
@@ -133,7 +134,7 @@ public class UserDao extends BaseDao<User> {
         QueryRunner runner = new QueryRunner(JDBCUtil.getDataSource());
 
         try {
-            List<Map<String, Object>> map = null;
+            List<Map<String, Object>> map;
             if (pattern == null) {
                 map = runner.query(sql.toString(), new MapListHandler()
                         , id, (page - 1) * MAX_PAGE_SIZE, MAX_PAGE_SIZE);

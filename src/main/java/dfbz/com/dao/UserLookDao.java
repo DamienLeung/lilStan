@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public class UserLookDao extends BaseDao {
+public class UserLookDao extends BaseDao<UserInfo> {
     public Map<String, Object> getUserDetail(Integer id) {
         StringBuilder sql = new StringBuilder();
         sql.append("select u.username, u.is_secret as isSecret, u.email, d.name as deptName" +
@@ -40,6 +40,6 @@ public class UserLookDao extends BaseDao {
 
     public void update(User user, UserInfo info) {
         super.save(info);
-        super.save(user);
+        new BaseDao<User>().save(user);
     }
 }

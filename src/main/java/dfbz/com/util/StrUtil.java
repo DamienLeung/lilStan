@@ -1,5 +1,6 @@
 package dfbz.com.util;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,7 @@ public class StrUtil {
             return false;
         }
 
-        String regEx1 = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        String regEx1 = "^([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         Pattern p = Pattern.compile(regEx1);
         Matcher m = p.matcher(email);
         return m.matches();
@@ -31,5 +32,10 @@ public class StrUtil {
     public static String createRandomNum() {
         int num = (int) ((Math.random() * 9 + 1) * 100000);
         return num + "";
+    }
+
+    public static String getUUID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
 }

@@ -7,9 +7,29 @@ $(function () {
         window.location.href = '/userLook/showDetail'
     });
 
-    //file表单选中文件时,让file表单的val展示到showname这个展示框
+
     $('#myFile').change(function () {
-        $('#showname').val($(this).val())
+        var file = $('#myFile')[0].files[0];
+        var formData = new FormData();
+        formData.append("file",file);
+
+        $.ajax({
+            url: '/userLook/upload',
+            type:'POST',
+            data: formData,
+            processData : false,
+            contentType : false,
+            success: function(data){
+                console.log(data);
+                if('fail' !== data){
+                    $("#myPic").attr("src",data);
+                    $("#myHeadPic").attr("src",data);
+                }
+            },
+            error:function(response){
+                console.log(response);
+            }
+        });
     });
 
     //用户列表，查看详情，通过class名字userDetail来找
@@ -48,7 +68,6 @@ $(function () {
             if (uId === aId)
                 layer.msg("不能關注自己");
             else {
-                $.post
                 layer.msg("关注成功");
             }
 
@@ -80,18 +99,5 @@ $(function () {
 
 //触发隐藏的file表单
 function makeThisfile() {
-    $('#myFile').click(function () {
-        var formData = new FormData(this);
-        $.ajax({
-            url: "/userLook/upload",
-            type: 'POST',
-            data: formData,
-            success: function (data) {
-                layer.msg(data)
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        })
-    })
+    $('#myFile').click();
 }

@@ -17,4 +17,10 @@ public class UserLookService {
     public void updateDetail(User user, UserInfo info) {
         dao.update(user, info);
     }
+
+    public void uploadImg(Integer id, String path) {
+        UserInfo userInfo = dao.rowQuery("user_id", id, UserInfo.class);
+        userInfo.setPic(path);
+        dao.save(userInfo);
+    }
 }

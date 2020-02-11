@@ -29,8 +29,16 @@
     <nav id="sidebar">
         <!-- Sidebar Header-->
         <div class="sidebar-header d-flex align-items-center">
-            <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..."
-                                                 class="img-fluid rounded-circle"></div>
+            <div id="avatar" class="avatar">
+                <c:if test="${sessionScope.userInfo.pic == null}">
+                    <img src="../assets/img/avatar-6.jpg" alt="..."
+                         class="img-fluid rounded-circle">
+                </c:if>
+                <c:if test="${sessionScope.userInfo.pic != null}">
+                    <img src="${sessionScope.userInfo.pic}" alt="..."
+                         class="img-fluid rounded-circle">
+                </c:if>
+            </div>
             <div class="title">
                 <h1 class="h5">${sessionScope.userInfo.username}</h1>
                 <p>${sessionScope.userInfo.deptName}</p>
@@ -135,7 +143,6 @@
         console.log(Number(firstPage));
         if (Number(firstPage) < 6) {
             layer.msg("頁碼已經到頂了");
-            return;
         } else {
             layer.msg("hello");
             window.location.href = '${pageContext.request.contextPath}/myUser/page?page=' + (Number(firstPage) - 1);
@@ -149,12 +156,10 @@
         console.log(Number(firstPage));
         if (Number(firstPage) + 5 > ${requestScope.maxPage}) {
             layer.msg("頁碼已經到底了");
-            return;
         } else {
             layer.msg("hello");
             window.location.href = '${pageContext.request.contextPath}/myUser/page?page=' + Number(Number(firstPage) + 5);
         }
-        console.log();
 
     });
 

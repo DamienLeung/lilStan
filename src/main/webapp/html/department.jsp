@@ -31,7 +31,15 @@
     <nav id="sidebar">
         <!-- Sidebar Header-->
         <div class="sidebar-header d-flex align-items-center">
-            <div id="avatar" class="avatar"><img src="../assets/img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle">
+            <div id="avatar" class="avatar">
+                <c:if test="${sessionScope.userInfo.pic == null}">
+                    <img src="../assets/img/avatar-6.jpg" alt="..."
+                         class="img-fluid rounded-circle">
+                </c:if>
+                <c:if test="${sessionScope.userInfo.pic != null}">
+                    <img src="${sessionScope.userInfo.pic}" alt="..."
+                         class="img-fluid rounded-circle">
+                </c:if>
             </div>
             <div class="title">
                 <h1 class="h5">${sessionScope.userInfo.username}</h1>
