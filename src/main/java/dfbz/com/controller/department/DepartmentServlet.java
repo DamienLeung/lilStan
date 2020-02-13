@@ -16,6 +16,7 @@ public class DepartmentServlet extends BaseServlet {
     private DepartmentService service = new DepartmentService();
 
     public void showMembers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
         resp.sendRedirect(req.getContextPath() + "/html/department.jsp");
     }
 }

@@ -14,9 +14,6 @@ import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.junit.Test;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;

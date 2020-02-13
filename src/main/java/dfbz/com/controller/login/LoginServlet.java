@@ -39,6 +39,7 @@ public class LoginServlet extends BaseServlet {
                     cookie.setPath("/");
                     resp.addCookie(cookie);
                 }
+                req.getSession().setMaxInactiveInterval(7200);
                 req.getSession().setAttribute("userId", id);
                 resp.sendRedirect(path + "/view/home");
             } else

@@ -23,16 +23,6 @@ public class ArticleServlet extends BaseServlet {
     private ArticleService service = new ArticleService();
     private ArticleDetailService detailService = new ArticleDetailService();
 
-//    public void showArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        String pageStr = req.getParameter("page");
-//        int page = 1;
-//        if (pageStr != null)
-//            page = Integer.parseInt(pageStr);
-//        List<Map<String, Object>> maps = service.getArticles(page, null);
-//        req.getSession().setAttribute("articleList", maps);
-//        resp.sendRedirect(req.getContextPath() + "/html/article.jsp");
-//    }
-
     public void showArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pageStr = req.getParameter("page");
         String pattern;

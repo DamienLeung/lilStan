@@ -3,10 +3,8 @@ package dfbz.com.controller.meeting;
 import dfbz.com.controller.BaseServlet;
 import dfbz.com.pojo.ConJoin;
 import dfbz.com.pojo.Conference;
-import dfbz.com.pojo.Department;
 import dfbz.com.service.DepartmentService;
 import dfbz.com.service.MeetingService;
-import javafx.beans.property.IntegerProperty;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

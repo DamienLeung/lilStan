@@ -59,7 +59,8 @@
             </li>
             <!--<li><a href="login.html"> <i class="icon-logout"></i>Login page </a></li>-->
 
-            <li><a href="#depDropdown" data-toggle="collapse" aria-expanded="true"> <i class="icon-windows2"></i>部门列表</a>
+            <li><a href="#depDropdown" data-toggle="collapse" aria-expanded="true"> <i
+                    class="icon-windows2"></i>部门列表</a>
                 <ul id="depDropdown" class="collapse show ">
                     <li class="active"><a href="<c:url value="/department/showMembers"/>">全部部门</a></li>
                     <li><a href="<c:url value="/meeting/showMeeting"/>">会议系统</a></li>
@@ -97,38 +98,37 @@
                         DepartmentService service = new DepartmentService();
                         List<Map<String, Object>> departments = service.getDepartments();
                         String userId = request.getSession().getAttribute("userId").toString();
-                        for (Map<String, Object>department:
-                             departments) {
+                        for (Map<String, Object> department :
+                                departments) {
                     %>
-                        <li class="list-group-item">
-                            <a href="#"><%=department.get("name")%></a>
-                            <span>&nbsp;</span>
-                            <span><%=department.get("amount")%></span>人
-                            <%
-                                List<Map<String, Object>> members = service.getMembers(Integer.parseInt(department.get("id").toString()));
-                            %>
-                            <div class="list-group myGroup isHidden">
-                                <ul>
-                                    <%
-                                        for (Map<String, Object> member:
-                                             members) {
-                                            if (member.get("realName") == null)
-                                                member.put("realName", member.get("member"));
-                                            String url;
-                                            if (userId.equals(member.get("id")))
-                                                url = request.getContextPath() + "/userLook/showDetail";
-                                            else
-                                                url = request.getContextPath() + "/user/getUserDetail?id=" + member.get("id");
-                                    %>
-                                    <li class="list-group-item">
-                                        <a href="<%=url%>"><%=member.get("realName")%></a>
-                                    </li>
-                                    <%
-                                        }
-                                    %>
-                                </ul>
-                            </div>
-                        </li>
+                    <li class="list-group-item">
+                        <a href="#"><%=department.get("name")%>
+                        </a>
+                        <span>&nbsp;</span>
+                        <span><%=department.get("amount")%></span>人
+                        <%
+                            List<Map<String, Object>> members = service.getMembers(Integer.parseInt(department.get("id").toString()));
+                        %>
+                        <div class="list-group myGroup isHidden">
+                            <ul>
+                                <%
+                                    for (Map<String, Object> member :
+                                            members) {
+                                        if (member.get("realName") == null)
+                                            member.put("realName", member.get("member"));
+                                        String url;
+                                        url = request.getContextPath() + "/user/getUserDetail?id=" + member.get("id");
+                                %>
+                                <li class="list-group-item">
+                                    <a href="<%=url%>"><%=member.get("realName")%>
+                                    </a>
+                                </li>
+                                <%
+                                    }
+                                %>
+                            </ul>
+                        </div>
+                    </li>
                     <%
                         }
                     %>

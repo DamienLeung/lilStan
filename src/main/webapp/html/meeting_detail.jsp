@@ -192,6 +192,8 @@
                 }
             );
             $(this).val("会议已结束");
+            $(this).removeClass("btn-info");
+            $(this).addClass("btn-light");
             $(this).attr("disabled", "disabled");
         }
     });
