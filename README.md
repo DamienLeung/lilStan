@@ -31,3 +31,7 @@ Department page displays departments with the members in these departments. In t
 <h2>Meeting Page</h2>
 
 Meeting page is a page to show user all the meetings including on process one, ended one and preparing one. In this page, there are five functions. First one, displaying all the meeting with brief details and its status. Second function is searching meeting. Third function is posting meeting. Fourth function, display meeting information detailly. Fifth function is for user to determine if they are going to attend this meeting or decline attendance, or start the meeting and end the meeting.
+
+<h2>User Information Editing Page</h2>
+
+User information editing page is a page for user to edit their own information, for example, changing user icon, user real name, department etc. In this page, there are two main functions, first one is information editing of user, the second one is update user icon.
