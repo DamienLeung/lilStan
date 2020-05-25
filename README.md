@@ -1,4 +1,4 @@
-<h1>LilStan Project a.k.a. xbjy</h1>
+<h1>LilStan Project</h1>
 <h2>Introduction</h2>
 This project is aimed on create a Java web app for a company's employees for their background communication each other. There is one page is still under development, the home page, this page contains the article posting counts and employee register count.
 
